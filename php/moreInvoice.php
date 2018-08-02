@@ -1,12 +1,48 @@
 <?php
 
-$document= "<div class='panel'>
+function getCompanyDetails($id){
+	$conn = mysqli_connect("localhost", "root", "", "meansdb");
+	
+	$sql = "SELECT senderId, receiverId, docNumber, prescriptionDate, receptionDate, paymentDate FROM registry WHERE id=$id";
+	
+	$result = mysqli_query($conn, $sql);
+	mysqli_close($conn);
+	
+	if (mysqli_num_rows($result) > 0) {
+		$row = mysqli_fetch_assoc($result);
+		
+		$sender = companyDetails('divSender',$row["senderId"]);
+		$receiver = companyDetails('divReceiver',$row["receiverId"]);
+		
+		echo "<!-- Number of document -->
+			<button class='accordion' id='docNumber' onclick='documentClick()'>Dokuments</button>
+			<div class='panel'>
 				<div class='container'>
-					<input type='text' id='number' placeholder='Dokumenta numurs'>
+					<input type='text' id='number' placeholder='Dokumenta numurs' value='".$row["docNumber"]."'>
 					<input type='file' accept='.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel'/>
 					<button class='buttonDownload' style='float: right;'><i class='fa fa-download'></i> Lejuplādēt</button>
 				</div>
-			</div>";
+			</div>
+			
+			<!-- Date -->
+			<button class='accordion' id='date' onclick='dateClick()'>Datums</button>
+			<div class='panel'>
+				<div class='container'>
+					<input type='text' id='preDate' placeholder='Izrakstīšanas datums' value='".$row["prescriptionDate"]."'>
+					<input type='text' id='recDate' placeholder='Saņemšanas datums' value='".$row["receptionDate"]."'>
+					<input type='text' id='paymentDate' placeholder='Apmaksas datums' value='".$row["paymentDate"]."'>
+				</div>
+			</div>
+			
+			<!-- Deliverer -->
+			<button class='accordion' id='sender' onclick=\"companyClick('divSender')\">Preču piegādātājs</button>
+			$sender
+
+			<!-- Receiver -->
+			<button class='accordion' id='receiver' onclick=\"companyClick('divReceiver')\">Preču saņēmējs</button>
+			$receiver";
+	}
+}
 
 function companyDetails($panelId,$id) {
 	$conn = mysqli_connect("localhost", "root", "", "meansdb");
@@ -20,7 +56,7 @@ function companyDetails($panelId,$id) {
 	if (mysqli_num_rows($result) > 0) {
 		$row = mysqli_fetch_assoc($result);
 		
-		$companyDetails = 
+		return 
 			"<div class='panel' id = '$panelId'>
 				<div class='container'>
 					<input type='text' id='title' placeholder='Kompānijas nosaukums' value='".$row["name"]."'/>
@@ -32,32 +68,8 @@ function companyDetails($panelId,$id) {
 				</div>
 			</div>";
 	}
-	else{
-		$companyDetails = 
-			"<div class='panel' id = '$id'>
-				<div class='container'>
-					<input type='text' id='title' placeholder='Kompānijas nosaukums'/>
-					<input type='text' id='reNumber' placeholder='Kompānijas reģistrācijas numurs' onkeypress='return isNumberKey(event)'/>
-					<input type='text' id='location' placeholder='Kompānijas juridiskā adrese'/>
-					<input type='text' id='address' placeholder='Kompānijas faktiskā adrese'/>
-					<input type='text' id='bank' placeholder='Kompānijas konta numurs' onkeypress='return isNumberKey(event)'/>
-					<input type='text' id='representative' placeholder='Kompānijas pārstāvis'/>
-				</div>
-			</div>";
-	}
-	
-	return $companyDetails;
 }
-	
-$dates = 
-	"<div class='panel'>
-		<div class='container'>
-			<input type='text' id='preDate' placeholder='Izrakstīšanas datums'>
-			<input type='text' id='recDate' placeholder='Saņemšanas datums'>
-			<input type='text' id='paymentDate' placeholder='Apmaksas datums'>
-		</div>
-	</div>";
-	
+		
 $products = 
 	"<div class='panel'>
 		<div class='container'>

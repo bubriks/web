@@ -6,34 +6,15 @@
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 		<?php
 			include "php/moreInvoice.php";
+			session_start();
 		?>
 	</head>
 	<body onload="start()">
 	
 		<h2 style="text-align:center;">Pavadzīme</h2>
 		
-		<!-- Number of document -->
-		<button class="accordion" id="docNumber" onclick="documentClick()">Dokuments</button>
 		<?php
-			echo $document;
-		?>
-		
-		<!-- Date -->
-		<button class="accordion" id="date" onclick="dateClick()">Datums</button>
-		<?php
-			echo $dates;
-		?>
-
-		<!-- Deliverer -->
-		<button class="accordion" id="sender" onclick="companyClick('divSender')">Preču piegādātājs</button>
-		<?php
-			echo companyDetails("divSender",2);
-		?>
-
-		<!-- Receiver -->
-		<button class="accordion" id="receiver" onclick="companyClick('divReceiver')">Preču saņēmējs</button>
-		<?php
-			echo companyDetails("divReceiver",1);
+			getCompanyDetails($_SESSION["id"])
 		?>
 
 		<!-- Product -->
@@ -69,6 +50,12 @@
 		acc[acc.length -1].classList.toggle("active");
 		
 		addRow();
+		
+		//if has id (existing)
+		documentClick();
+		dateClick();
+		companyClick("divSender");
+		companyClick("divReceiver");
 	}
 	
 	function documentClick(){

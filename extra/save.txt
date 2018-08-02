@@ -1,0 +1,72 @@
+dizains augspuladei
+augsup un lejuplade
+
+dizains datubazie
+izveidot datubazi pec dizaina
+
+//////////////////////////////////////////
+
+$conn = mysqli_connect("localhost", "root", "", "meansdb");
+	
+	$sql = "SELECT senderId, receiverId, docNumber, prescriptionDate, receptionDate, paymentDate FROM registry WHERE id=$id";
+	
+	$result = mysqli_query($conn, $sql);
+	mysqli_close($conn);
+	
+	if (mysqli_num_rows($result) > 0) {
+		$row = mysqli_fetch_assoc($result);
+
+/////////////////////////////////////////
+
+CREATE DATABASE MeansDB;
+
+CREATE TABLE company(
+    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(30) NOT NULL,
+    regNumber VARCHAR(30) NOT NULL,
+    location VARCHAR(50) NOT NULL,
+    address VARCHAR(50) NOT NULL,
+    bankNumber VARCHAR(30) NOT NULL
+);
+
+CREATE TABLE representative(
+    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    companyId INT NOT NULL REFERENCES company(id),
+    name VARCHAR(30) NOT NULL
+);
+
+CREATE TABLE registry(
+    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    senderId INT NOT NULL REFERENCES representative(id),
+	receiverId INT NOT NULL REFERENCES representative(id),
+	docNumber VARCHAR(30) NOT NULL,
+	prescriptionDate TIMESTAMP NOT NULL,
+	receptionDate TIMESTAMP NOT NULL,
+	paymentDate TIMESTAMP NOT NULL
+);
+
+CREATE TABLE productGroup(
+    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+	name VARCHAR(30) NOT NULL,
+	tax INT NOT NULL
+);
+
+CREATE TABLE product(
+    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    productGroupId INT NOT NULL REFERENCES productGroup(id),
+	name VARCHAR(30) NOT NULL,
+    barcode VARCHAR(30) NOT NULL
+);
+
+CREATE TABLE item(
+    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    productId INT NOT NULL REFERENCES product(id),
+	serNumber VARCHAR(30) NOT NULL,
+	incomingPrice DECIMAL(2) NOT NULL
+);
+
+CREATE TABLE items(
+    registryId INT NOT NULL REFERENCES registry(id),
+	itemId INT NOT NULL REFERENCES itme(id),
+    PRIMARY KEY (registryId, itemId)
+);

@@ -4,6 +4,8 @@
 		<link rel="stylesheet" href="css/style.css" />	
 		<?php
 			include "php/moreRegistry.php";
+			session_start();
+			$_SESSION["id"] = 1;
 		?>
 	</head>
 	<body onload="start()">
