@@ -10,3 +10,8 @@ INSERT INTO company(name, regNumber, location, address, bankNumber) VALUES ("mea
 INSERT INTO representative(companyId, name) VALUES (1,"Arnis")
 
 INSERT INTO registry(senderId, receiverId, docNumber, prescriptionDate, receptionDate, paymentDate) VALUES (2,1,"WX-DD 324435346",'2000/01/01','2002/01/01','2010/01/01')
+
+INSERT INTO productgroup(name, tax) VALUES ("Datori",20),("Lietotaj prog",0)
+
+SELECT product.name, product.barcode, item.serNumber, productgroup.name as groupName, item.incomingPrice, productgroup.tax FROM items INNER JOIN item ON items.itemId = item.id INNER JOIN product ON item.productId = product.id INNER JOIN productgroup ON product.productGroupId = productgroup.id WHERE items.registryId = 1
+

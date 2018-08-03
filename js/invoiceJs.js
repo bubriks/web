@@ -23,6 +23,34 @@ function start(){
 	dateClick();
 	companyClick("divSender");
 	companyClick("divReceiver");
+	
+	var $tblrows = $("#productTable tbody tr");
+	
+	$tblrows.each(function (index) {
+		var $tblrow = $(this);
+		
+		var amount = $tblrow.find("[name=amount]").val();
+		var priceIn = $tblrow.find("[name=priceIn]").val();
+		var tax = $tblrow.find("[name=tax]").val();
+		var subTotal = parseFloat(amount) * (parseFloat(priceIn)*((parseFloat(tax)/100)+1));
+		
+		if (!isNaN(subTotal)) {
+
+			$tblrow.find('.subTotal').val(subTotal.toFixed(2));
+		}
+		else{
+			$tblrow.find('.subTotal').val(0);
+		}
+		var total = 0;
+
+		$(".subTotal").each(function () {
+			var stval = parseFloat($(this).val());
+			total += isNaN(stval) ? 0 : stval;
+		});
+
+		$('.total').val(total.toFixed(2));
+		document.getElementById("product").innerText = "Prece: " + total.toFixed(2);
+	});
 }
 
 function documentClick(){
@@ -66,8 +94,8 @@ function addRow() {
 	var cell8 = row.insertCell(8);
 	cell.innerHTML = "<button class='buttonDelete' style='border-radius: 4px;' onclick='DeleteRow(this);'>Dzēst</button>";
 	cell1.innerHTML = "<input type='text' class='name' name='name' placeholder='Nosaukums' />";
-	cell2.innerHTML = "<input type='text' class='barcode' name='barcode' placeholder='Svītrkods' onkeypress='return isNumberKey(event)' />";
-	cell3.innerHTML = "<input type='text' class='serNumber' name='serNumber' placeholder='Seriāla numurs' onkeypress='return isNumberKey(event)' />";
+	cell2.innerHTML = "<input type='text' class='barcode' name='barcode' placeholder='Svītrkods' />";
+	cell3.innerHTML = "<input type='text' class='serNumber' name='serNumber' placeholder='Seriāla numurs' />";
 	cell4.innerHTML = "<input type='text' list='browsers' class='group' name='group' placeholder='Preču grupa'/>"+
 	<!-- to be removed -->
 		  "<datalist id='browsers'>"+

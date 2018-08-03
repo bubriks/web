@@ -1,8 +1,8 @@
 dizains augspuladei
 augsup un lejuplade
 
-dizains datubazie
-izveidot datubazi pec dizaina
+pievienot izveli produktu grupai
+ja vienads sernumber vai nav tad jaskata daudzumu
 
 //////////////////////////////////////////
 

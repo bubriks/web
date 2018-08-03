@@ -13,7 +13,7 @@
 	<body onload="start()">
 	
 		<h2 style="text-align:center;">Pavadzīme</h2>
-		
+		<!-- company -->
 		<?php
 			getCompanyDetails($_SESSION["id"])
 		?>
@@ -21,7 +21,7 @@
 		<!-- Product -->
 		<button class="accordion" id="product">Prece</button>
 		<?php
-			echo $products;
+			getProducts($_SESSION["id"]);
 		?>
 		
 		<button class="buttonSave" onclick="location.href = 'registry.php';">Apstiprināt</button>

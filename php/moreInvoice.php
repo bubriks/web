@@ -70,40 +70,71 @@ function companyDetails($panelId,$id) {
 	}
 }
 		
-$products = 
-	"<div class='panel'>
-		<div class='container'>
-			<table id='productTable'>
-				<thead>
-					<tr>
-						<th>Darbība</th>
-						<th>Nosaukums</th>
-						<th>Svītrkods</th>
-						<th>Seriāla numurs</th>
-						<th>Preču grupa</th>
-						<th>Daudzums</th>
-						<th>Ienākoša cena</th>
-						<th>PVN</th>
-						<th>Summa</th>
-					</tr>
-				</thead>
-				<tfoot>
-					<tr>
-						<td><button onclick='addRow()' class='buttonAdd'>+</button></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td><input type='text' class='total' name='total' placeholder='0.00' readonly/></td>
-					</tr>
-				</tfoot>
-				<tbody>
-				</tbody>
-			</table>
-		</div>
-	</div>";
+function getProducts($id){
+	$conn = mysqli_connect("localhost", "root", "", "meansdb");
 	
+	$sql = "SELECT product.name, product.barcode, item.serNumber, productgroup.name as groupName, item.incomingPrice, productgroup.tax FROM items 
+			INNER JOIN item ON items.itemId = item.id 
+			INNER JOIN product ON item.productId = product.id 
+			INNER JOIN productgroup ON product.productGroupId = productgroup.id WHERE items.registryId = $id";
+
+	$result = mysqli_query($conn, $sql);
+	mysqli_close($conn);
+	
+	if (mysqli_num_rows($result) > 0) {
+		
+		$products = 
+		"<div class='panel'>
+			<div class='container'>
+				<table id='productTable'>
+					<thead>
+						<tr>
+							<th>Darbība</th>
+							<th>Nosaukums</th>
+							<th>Svītrkods</th>
+							<th>Seriāla numurs</th>
+							<th>Preču grupa</th>
+							<th>Daudzums</th>
+							<th>Ienākoša cena</th>
+							<th>PVN</th>
+							<th>Summa</th>
+						</tr>
+					</thead>
+					<tfoot>
+						<tr>
+							<td><button onclick='addRow()' class='buttonAdd'>+</button></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td><input type='text' class='total' name='total' placeholder='0.00' readonly/></td>
+						</tr>
+					</tfoot>
+				<tbody>";
+		
+		while($row = mysqli_fetch_assoc($result)) {
+			 $products .= "<tr>
+							<td><button class='buttonDelete' style='border-radius: 4px;' onclick='DeleteRow(this);'>Dzēst</button></td>
+							<td><input type='text' class='name' name='name' placeholder='Nosaukums' value='".$row["name"]."'/></td>
+							<td><input type='text' class='barcode' name='barcode' placeholder='Svītrkods' value='".$row["barcode"]."'/></td>
+							<td><input type='text' class='serNumber' name='serNumber' placeholder='Seriāla numurs' value='".$row["serNumber"]."'/></td>
+							<td><input type='text' class='group' name='group' placeholder='Preču grupa' value='".$row["groupName"]."'/></td>
+							<td><input type='text' class='amount' name='amount' placeholder='Daudzums' onkeypress='return isNumberKey(event)' value='1'/></td>
+							<td><input type='text' class='priceIn' name='priceIn' placeholder='Ienākoša cena' onkeypress='return isNumberKey(event)' value='".$row["incomingPrice"]."'/></td>
+							<td><input type='text' class='tax' name='tax' placeholder='PVN' onkeypress='return isNumberKey(event)' value='".$row["tax"]."'/></td>
+							<td><input type='text' class='subTotal' name='subTotal' placeholder='Summa' readonly/></td>
+						</tr>";
+		}
+		
+		$products .= "</tbody>
+					</table>
+				</div>
+			</div>";
+		
+		echo $products;
+	}
+}	
 ?>
