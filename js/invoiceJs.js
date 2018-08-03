@@ -1,4 +1,4 @@
-function start(){
+function start(id){
 	var acc = document.getElementsByClassName("accordion");
 
 	for (var i = 0; i < acc.length; i++) {
@@ -19,38 +19,40 @@ function start(){
 	addRow();
 	
 	//if has id (existing)
-	documentClick();
-	dateClick();
-	companyClick("divSender");
-	companyClick("divReceiver");
-	
-	var $tblrows = $("#productTable tbody tr");
-	
-	$tblrows.each(function (index) {
-		var $tblrow = $(this);
+	if(id>0){
+		documentClick();
+		dateClick();
+		companyClick("divSender");
+		companyClick("divReceiver");
 		
-		var amount = $tblrow.find("[name=amount]").val();
-		var priceIn = $tblrow.find("[name=priceIn]").val();
-		var tax = $tblrow.find("[name=tax]").val();
-		var subTotal = parseFloat(amount) * (parseFloat(priceIn)*((parseFloat(tax)/100)+1));
+		var $tblrows = $("#productTable tbody tr");
 		
-		if (!isNaN(subTotal)) {
+		$tblrows.each(function (index) {
+			var $tblrow = $(this);
+			
+			var amount = $tblrow.find("[name=amount]").val();
+			var priceIn = $tblrow.find("[name=priceIn]").val();
+			var tax = $tblrow.find("[name=tax]").val();
+			var subTotal = parseFloat(amount) * (parseFloat(priceIn)*((parseFloat(tax)/100)+1));
+			
+			if (!isNaN(subTotal)) {
 
-			$tblrow.find('.subTotal').val(subTotal.toFixed(2));
-		}
-		else{
-			$tblrow.find('.subTotal').val(0);
-		}
-		var total = 0;
+				$tblrow.find('.subTotal').val(subTotal.toFixed(2));
+			}
+			else{
+				$tblrow.find('.subTotal').val(0);
+			}
+			var total = 0;
 
-		$(".subTotal").each(function () {
-			var stval = parseFloat($(this).val());
-			total += isNaN(stval) ? 0 : stval;
+			$(".subTotal").each(function () {
+				var stval = parseFloat($(this).val());
+				total += isNaN(stval) ? 0 : stval;
+			});
+
+			$('.total').val(total.toFixed(2));
+			document.getElementById("product").innerText = "Prece: " + total.toFixed(2);
 		});
-
-		$('.total').val(total.toFixed(2));
-		document.getElementById("product").innerText = "Prece: " + total.toFixed(2);
-	});
+	}
 }
 
 function documentClick(){

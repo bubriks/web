@@ -15,3 +15,10 @@ INSERT INTO productgroup(name, tax) VALUES ("Datori",20),("Lietotaj prog",0)
 
 SELECT product.name, product.barcode, item.serNumber, productgroup.name as groupName, item.incomingPrice, productgroup.tax FROM items INNER JOIN item ON items.itemId = item.id INNER JOIN product ON item.productId = product.id INNER JOIN productgroup ON product.productGroupId = productgroup.id WHERE items.registryId = 1
 
+SELECT registry.id, receptionDate, company.name, company.bankNumber, paymentDate, docNumber, SUM(item.incomingPrice) as incomingPrice, SUM(item.incomingPrice * (productgroup.tax / 100)) as tax FROM registry
+INNER JOIN representative on representative.id = registry.senderId
+INNER JOIN company on company.id = representative.companyId
+INNER JOIN items on items.registryId = registry.id
+INNER JOIN item on item.id = items.itemId
+INNER JOIN product on product.id = item.productId
+INNER JOIN productgroup on productgroup.id = product.productGroupId

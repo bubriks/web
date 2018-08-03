@@ -3,6 +3,9 @@ augsup un lejuplade
 
 pievienot izveli produktu grupai
 ja vienads sernumber vai nav tad jaskata daudzumu
+kopeja summa par laiku
+par transportu
+mainit datuma formatu db
 
 //////////////////////////////////////////
 

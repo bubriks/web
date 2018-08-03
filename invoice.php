@@ -8,20 +8,24 @@
 		<?php
 			include "php/moreInvoice.php";
 			session_start();
+			$_SESSION["id"] = $_POST['id'];
+			$id = $_SESSION["id"];
 		?>
 	</head>
-	<body onload="start()">
+	<?php
+		echo "<body onload='start($id)'>"
+	?>
 	
 		<h2 style="text-align:center;">Pavadzīme</h2>
 		<!-- company -->
 		<?php
-			getCompanyDetails($_SESSION["id"])
+			getCompanyDetails($id)
 		?>
 
 		<!-- Product -->
 		<button class="accordion" id="product">Prece</button>
 		<?php
-			getProducts($_SESSION["id"]);
+			getProducts($id);
 		?>
 		
 		<button class="buttonSave" onclick="location.href = 'registry.php';">Apstiprināt</button>

@@ -15,3 +15,8 @@ function start(){
 	
 	document.getElementById("endDate").valueAsDate = new Date();
 }
+
+function readMore()
+{
+    window.location.href = "invoice.php";
+}

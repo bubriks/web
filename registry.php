@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<link rel="stylesheet" href="css/style.css" />	
+		<link rel="stylesheet" href="css/style.css" />
+		<script type="text/javascript" src="//code.jquery.com/jquery-2.1.0.min.js"></script>
 		<script src="js/registryJs.js"></script>
 		<?php
 			include "php/moreRegistry.php";
 			session_start();
-			$_SESSION["id"] = 1;
 		?>
 	</head>
 	<body onload="start()">
@@ -17,10 +17,13 @@
 			echo $search;
 		?>
 		
-		<div class='container'>
-			<button onclick="location.href = 'invoice.php';" class="buttonAdd">+</button>
+		<div class="container">
+			<form action="invoice.php" method="post">
+				<input type="hidden" name="id" value="0"/>
+				<input type="submit" name="submit" value="Pievienot Jaunu" onclick="readMore()"class="buttonAdd"/>
+			</form>
 			<?php
-				echo $documentTable;
+				echo getRegistry();
 			?>
 		</div>
 	</body>
