@@ -98,14 +98,7 @@ function addRow() {
 	cell1.innerHTML = "<input type='text' class='name' name='name' placeholder='Nosaukums' />";
 	cell2.innerHTML = "<input type='text' class='barcode' name='barcode' placeholder='Svītrkods' />";
 	cell3.innerHTML = "<input type='text' class='serNumber' name='serNumber' placeholder='Seriāla numurs' />";
-	cell4.innerHTML = "<input type='text' list='browsers' class='group' name='group' placeholder='Preču grupa'/>"+
-	<!-- to be removed -->
-		  "<datalist id='browsers'>"+
-			"<option value='Kanceleja'>"+
-			"<option value='Datori'>"+
-			"<option value='Ievades iekārtas'>"+
-			"<option value='Izvades iekārtas'>"+
-		  "</datalist>";
+	cell4.innerHTML = "<input type='text' list='prodGroups' class='group' name='group' placeholder='Preču grupa'/>";
 	cell5.innerHTML = "<input type='text' class='amount' name='amount' placeholder='Daudzums' onkeypress='return isNumberKey(event)'/>";
 	cell6.innerHTML = "<input type='text' class='priceIn' name='priceIn' placeholder='Ienākoša cena' onkeypress='return isNumberKey(event)'/>";
 	cell7.innerHTML = "<input type='text' class='tax' name='tax' placeholder='PVN' onkeypress='return isNumberKey(event)'/>";

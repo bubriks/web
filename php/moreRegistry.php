@@ -2,8 +2,8 @@
 $search =
 	"<div class='panel'>
 		<div class='container'>
-			No:<input type='date' id='startDate' value='2000-01-01'> 
-			Līdz:<input type='date' id='endDate'>
+			No:<input type='date' id='startDate' value='2000-01-01' style='resize:none'>
+			Līdz:<input type='date' id='endDate' style='resize:none'>
 			Kompānijas nosaukums: <input type='text' list='companies' placeholder='Kompānijas'/>
 			<datalist id='companies'>
 				<option value='Means'>
@@ -27,6 +27,7 @@ function getRegistry(){
 			INNER JOIN productgroup on productgroup.id = product.productGroupId";
 
 	$result = mysqli_query($conn, $sql);
+	
 	mysqli_close($conn);
 	
 	if (mysqli_num_rows($result) > 0) {
@@ -55,6 +56,7 @@ function getRegistry(){
 			$arr = explode(" ", $row["docNumber"], 2);
 			$ser = $arr[0];
 			$num = $arr[1];
+			#$date = date('d-m-Y', strtotime($row["receptionDate"]));
 			
 			$registries .= "<tr>
 								<td><input type='text' value='".$row["receptionDate"]."' readonly/></td>
