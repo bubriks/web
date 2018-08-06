@@ -18,7 +18,6 @@ function start(id){
 	
 	addRow();
 	
-	//if has id (existing)
 	if(id>0){
 		documentClick();
 		dateClick();
@@ -35,8 +34,7 @@ function start(id){
 			var tax = $tblrow.find("[name=tax]").val();
 			var subTotal = parseFloat(amount) * (parseFloat(priceIn)*((parseFloat(tax)/100)+1));
 			
-			if (!isNaN(subTotal)) {
-
+			if (!isNaN(subTotal)){
 				$tblrow.find('.subTotal').val(subTotal.toFixed(2));
 			}
 			else{
@@ -108,6 +106,14 @@ function addRow() {
 	
 	$tblrows.each(function (index) {
 		var $tblrow = $(this);
+		
+		$tblrow.find('.itemGroup').on('change', function () {
+			var val = $tblrow.find("[name=itemGroup]").val();
+			var xyz = $('#prodGroups option').filter(function() {
+				return this.value == val;
+			}).data('xyz');
+			$tblrow.find("[name=tax]").val(xyz);
+		}); 
 		
 		$tblrow.find('.amount, .priceIn, .tax').on('change', function () {
 

@@ -140,3 +140,11 @@ th {
     background-color: #4CAF50;
     color: white;
 }
+
+
+
+
+$tblrow.find('.itemGroup').on('change', function () {
+				var val = $tblrow.find("[name=itemGroup]").val();
+				alert(val);				
+			}); 
