@@ -56,7 +56,6 @@ function getRegistry(){
 			$arr = explode(" ", $row["docNumber"], 2);
 			$ser = $arr[0];
 			$num = $arr[1];
-			#$date = date('d-m-Y', strtotime($row["receptionDate"]));
 			
 			$registries .= "<tr>
 								<td><input type='text' value='".$row["receptionDate"]."' readonly/></td>

@@ -8,8 +8,7 @@
 		<?php
 			include "php/moreInvoice.php";
 			session_start();
-			$_SESSION["id"] = $_POST['id'];
-			$id = $_SESSION["id"];
+			$id = $_POST['id'];
 		?>
 	</head>
 	<?php

@@ -124,6 +124,37 @@ function getProducts($id){
 	$sql = "SELECT name, tax FROM productgroup";
 
 	$list = mysqli_query($conn, $sql);
+
+	$products = 
+		"<div class='panel'>
+			<div class='container'>
+				<table id='productTable'>
+					<thead>
+						<tr>
+							<th>Darbība</th>
+							<th>Nosaukums</th>
+							<th>Svītrkods</th>
+							<th>Seriāla numurs</th>
+							<th>Preču grupa</th>
+							<th>Daudzums</th>
+							<th>Ienākoša cena</th>
+							<th>PVN</th>
+							<th>Summa</th>
+						</tr>
+					</thead>
+					<tfoot>
+						<tr>
+							<td><button onclick='addRow()' class='buttonAdd'>+</button></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td colspan='2'><h3 style='text-align:right;'>Transporta izdevumi:</h3></td>
+							<td><input type='text' class='transport' name='transport' placeholder='Transporta izdevumi' onkeypress='return isNumberKey(event,this.value)' value='0.0'/></td>
+							<td><h3 style='text-align:right;'>Summa:</h3></td>
+							<td><input type='text' class='total' name='total' placeholder='0.00' readonly/></td>
+						</tr>
+					</tfoot>
+				<tbody>";
 		
 	if($id!=0){
 		$sql = "SELECT product.name, product.barcode, item.serNumber, productgroup.name as groupName, item.incomingPrice, productgroup.tax FROM items 
@@ -132,40 +163,8 @@ function getProducts($id){
 				INNER JOIN productgroup ON product.productGroupId = productgroup.id WHERE items.registryId = $id";
 
 		$result = mysqli_query($conn, $sql);
-		
+
 		if (mysqli_num_rows($result) > 0) {
-			
-			$products = 
-			"<div class='panel'>
-				<div class='container'>
-					<table id='productTable'>
-						<thead>
-							<tr>
-								<th>Darbība</th>
-								<th>Nosaukums</th>
-								<th>Svītrkods</th>
-								<th>Seriāla numurs</th>
-								<th>Preču grupa</th>
-								<th>Daudzums</th>
-								<th>Ienākoša cena</th>
-								<th>PVN</th>
-								<th>Summa</th>
-							</tr>
-						</thead>
-						<tfoot>
-							<tr>
-								<td><button onclick='addRow()' class='buttonAdd'>+</button></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td><input type='text' class='total' name='total' placeholder='0.00' readonly/></td>
-							</tr>
-						</tfoot>
-					<tbody>";
 			
 			while($row = mysqli_fetch_assoc($result)) {
 				 $products .= "<tr>
@@ -180,55 +179,17 @@ function getProducts($id){
 								<td><input type='text' class='subTotal' name='subTotal' placeholder='Summa' readonly/></td>
 							</tr>";
 			}
-			
-			$products .= "</tbody>
-						</table>
-					</div>
-				</div>";
-			
-			echo $products;
 		}
-	}
-	else{
-		$products = 
-			"<div class='panel'>
-				<div class='container'>
-					<table id='productTable'>
-						<thead>
-							<tr>
-								<th>Darbība</th>
-								<th>Nosaukums</th>
-								<th>Svītrkods</th>
-								<th>Seriāla numurs</th>
-								<th>Preču grupa</th>
-								<th>Daudzums</th>
-								<th>Ienākoša cena</th>
-								<th>PVN</th>
-								<th>Summa</th>
-							</tr>
-						</thead>
-						<tfoot>
-							<tr>
-								<td><button onclick='addRow()' class='buttonAdd'>+</button></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td><input type='text' class='total' name='total' placeholder='0.00' readonly/></td>
-							</tr>
-						</tfoot>
-					<tbody>
-					</tbody>
-				</table>
-			</div>
-		</div>";
-		echo $products;
 	}
 	
 	mysqli_close($conn);
+
+	$products .= "</tbody>
+				</table>
+			</div>
+		</div>";
+	
+	echo $products;
 	
 	$groups = "<datalist id='prodGroups'>";
 	while($row = mysqli_fetch_assoc($list)) {
@@ -237,4 +198,5 @@ function getProducts($id){
 	$groups .=	"</datalist>";
 	echo $groups;
 }	
+
 ?>

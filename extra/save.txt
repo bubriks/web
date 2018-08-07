@@ -5,6 +5,7 @@ ja vienads sernumber vai nav tad jaskata daudzumu
 kopeja summa par laiku registry
 izveloties ekistejosu precu grupu mainas pvn
 par transportu
+sub total
 
 //////////////////////////////////////////
 

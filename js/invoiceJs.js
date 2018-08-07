@@ -33,6 +33,26 @@ function start(id){
 			
 			calulateRowValue($tblrow);
 		});
+
+		var $tblrows = $("#productTable tfoot tr");
+
+		$tblrows.each(function (index) {
+			var $tblrow = $(this);
+			
+			$tblrow.find('.transport').on('change', function () {
+				var transport = parseFloat($tblrow.find("[name=transport]").val());
+				var total = parseFloat($tblrow.find("[name=total]").val());
+				var dif = (total + transport) / total;
+				
+				var $rows = $("#productTable tbody tr");
+				//subtotals
+				$rows.each(function (index) {
+					var $row = $(this);
+					
+					$row.find('.subTotal').val($row.find('.subTotal').val() * dif);
+				});
+			}); 
+		});
 	}
 }
 
