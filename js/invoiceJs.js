@@ -29,26 +29,9 @@ function start(id){
 		$tblrows.each(function (index) {
 			var $tblrow = $(this);
 			
-			var amount = $tblrow.find("[name=amount]").val();
-			var priceIn = $tblrow.find("[name=priceIn]").val();
-			var tax = $tblrow.find("[name=tax]").val();
-			var subTotal = parseFloat(amount) * (parseFloat(priceIn)*((parseFloat(tax)/100)+1));
+			changeRowValue($tblrow);
 			
-			if (!isNaN(subTotal)){
-				$tblrow.find('.subTotal').val(subTotal.toFixed(2));
-			}
-			else{
-				$tblrow.find('.subTotal').val(0);
-			}
-			var total = 0;
-
-			$(".subTotal").each(function () {
-				var stval = parseFloat($(this).val());
-				total += isNaN(stval) ? 0 : stval;
-			});
-
-			$('.total').val(total.toFixed(2));
-			document.getElementById("product").innerText = "Prece: " + total.toFixed(2);
+			calulateRowValue($tblrow);
 		});
 	}
 }
@@ -96,50 +79,52 @@ function addRow() {
 	cell1.innerHTML = "<input type='text' class='name' name='name' placeholder='Nosaukums' />";
 	cell2.innerHTML = "<input type='text' class='barcode' name='barcode' placeholder='Svītrkods' />";
 	cell3.innerHTML = "<input type='text' class='serNumber' name='serNumber' placeholder='Seriāla numurs' />";
-	cell4.innerHTML = "<input type='text' list='prodGroups' class='group' name='group' placeholder='Preču grupa'/>";
-	cell5.innerHTML = "<input type='text' class='amount' name='amount' placeholder='Daudzums' onkeypress='return isNumberKey(event)'/>";
-	cell6.innerHTML = "<input type='text' class='priceIn' name='priceIn' placeholder='Ienākoša cena' onkeypress='return isNumberKey(event)'/>";
-	cell7.innerHTML = "<input type='text' class='tax' name='tax' placeholder='PVN' onkeypress='return isNumberKey(event)'/>";
-	cell8.innerHTML = "<input type='text' class='subTotal' name='subTotal' placeholder='Summa' readonly/>";
-	
-	var $tblrows = $("#productTable tbody tr");
-	
-	$tblrows.each(function (index) {
-		var $tblrow = $(this);
+	cell4.innerHTML = "<input type='text' class='itemGroup' name='itemGroup' placeholder='Preču grupa' list='prodGroups' />";
+	cell5.innerHTML = "<input type='text' class='amount' name='amount' placeholder='Daudzums' onkeypress='return isNumberKey(event)' />";
+	cell6.innerHTML = "<input type='text' class='priceIn' name='priceIn' placeholder='Ienākoša cena' onkeypress='return isNumberKey(event)' />";
+	cell7.innerHTML = "<input type='text' class='tax' name='tax' placeholder='PVN' onkeypress='return isNumberKey(event)' />";
+	cell8.innerHTML = "<input type='text' class='subTotal' name='subTotal' placeholder='Summa' value='0' readonly/>";
 		
-		$tblrow.find('.itemGroup').on('change', function () {
-			var val = $tblrow.find("[name=itemGroup]").val();
-			var xyz = $('#prodGroups option').filter(function() {
-				return this.value == val;
-			}).data('xyz');
-			$tblrow.find("[name=tax]").val(xyz);
-		}); 
-		
-		$tblrow.find('.amount, .priceIn, .tax').on('change', function () {
+	changeRowValue($('#productTable tr:last'));
+}
 
-			var amount = $tblrow.find("[name=amount]").val();
-			var priceIn = $tblrow.find("[name=priceIn]").val();
-			var tax = $tblrow.find("[name=tax]").val();
-			var subTotal = parseFloat(amount) * (parseFloat(priceIn)*((parseFloat(tax)/100)+1));
-			
-			if (!isNaN(subTotal)) {
-
-				$tblrow.find('.subTotal').val(subTotal.toFixed(2));
-			}
-			else{
-				$tblrow.find('.subTotal').val(0);
-			}
-			var total = 0;
-
-			$(".subTotal").each(function () {
-				var stval = parseFloat($(this).val());
-				total += isNaN(stval) ? 0 : stval;
-			});
-
-			$('.total').val(total.toFixed(2));
-			document.getElementById("product").innerText = "Prece: " + total.toFixed(2);
-		});
+function changeRowValue(row){
+	row.find('.itemGroup').on('change', function () {
+		var val = row.find("[name=itemGroup]").val();
+		var xyz = $('#prodGroups option').filter(function() {
+			return this.value == val;
+		}).data('xyz');
+		row.find("[name=tax]").val(xyz);
+		calulateRowValue(row);
+	}); 
+	
+	row.find('.amount, .priceIn, .tax').on('change', function () {
+		calulateRowValue(row);
 	});
+}
+
+function calulateRowValue(row){
+	var amount = row.find("[name=amount]").val();
+	var priceIn = row.find("[name=priceIn]").val();
+	var tax = row.find("[name=tax]").val();
+	var subTotal = parseFloat(amount) * (parseFloat(priceIn)*((parseFloat(tax)/100)+1));
+	
+	if (!isNaN(subTotal)) {
+
+		row.find('.subTotal').val(subTotal.toFixed(2));
+	}
+	else{
+		row.find('.subTotal').val(0);
+	}
+	var total = 0;
+
+	$(".subTotal").each(function () {
+		var stval = parseFloat($(this).val());
+		total += isNaN(stval) ? 0 : stval;
+	});
+
+	$('.total').val(total.toFixed(2));
+	document.getElementById("product").innerText = "Prece: " + total.toFixed(2);
 }
 
 function isNumberKey(evt){

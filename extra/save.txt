@@ -6,7 +6,6 @@ kopeja summa par laiku registry
 izveloties ekistejosu precu grupu mainas pvn
 par transportu
 
-
 //////////////////////////////////////////
 
 $conn = mysqli_connect("localhost", "root", "", "meansdb");

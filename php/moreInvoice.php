@@ -119,21 +119,19 @@ function companyDetails($panelId,$id) {
 }
 		
 function getProducts($id){
-	if($id!=0){
-		$conn = mysqli_connect("localhost", "root", "", "meansdb");
+	$conn = mysqli_connect("localhost", "root", "", "meansdb");
+	
+	$sql = "SELECT name, tax FROM productgroup";
+
+	$list = mysqli_query($conn, $sql);
 		
+	if($id!=0){
 		$sql = "SELECT product.name, product.barcode, item.serNumber, productgroup.name as groupName, item.incomingPrice, productgroup.tax FROM items 
 				INNER JOIN item ON items.itemId = item.id 
 				INNER JOIN product ON item.productId = product.id 
 				INNER JOIN productgroup ON product.productGroupId = productgroup.id WHERE items.registryId = $id";
 
 		$result = mysqli_query($conn, $sql);
-		
-		$sql = "SELECT name, tax FROM productgroup";
-
-		$list = mysqli_query($conn, $sql);
-		
-		mysqli_close($conn);
 		
 		if (mysqli_num_rows($result) > 0) {
 			
@@ -178,7 +176,7 @@ function getProducts($id){
 								<td><input type='text' class='itemGroup' name='itemGroup' placeholder='Preču grupa' list='prodGroups' value='".$row["groupName"]."'/></td>
 								<td><input type='text' class='amount' name='amount' placeholder='Daudzums' onkeypress='return isNumberKey(event)' value='1'/></td>
 								<td><input type='text' class='priceIn' name='priceIn' placeholder='Ienākoša cena' onkeypress='return isNumberKey(event)' value='".$row["incomingPrice"]."'/></td>
-								<td><input type='text' id='tax' class='tax' name='tax' placeholder='PVN' onkeypress='return isNumberKey(event)' value='".$row["tax"]."'/></td>
+								<td><input type='text' class='tax' name='tax' placeholder='PVN' onkeypress='return isNumberKey(event)' value='".$row["tax"]."'/></td>
 								<td><input type='text' class='subTotal' name='subTotal' placeholder='Summa' readonly/></td>
 							</tr>";
 			}
@@ -189,13 +187,6 @@ function getProducts($id){
 				</div>";
 			
 			echo $products;
-			
-			$groups = "<datalist id='prodGroups'>";
-			while($row = mysqli_fetch_assoc($list)) {
-				$groups .= "<option value='".$row["name"]."' label = '".$row["tax"]."'  data-xyz = '".$row["tax"]."' >";
-			}
-			$groups .=	"</datalist>";
-			echo $groups;
 		}
 	}
 	else{
@@ -235,6 +226,15 @@ function getProducts($id){
 			</div>
 		</div>";
 		echo $products;
-	};
+	}
+	
+	mysqli_close($conn);
+	
+	$groups = "<datalist id='prodGroups'>";
+	while($row = mysqli_fetch_assoc($list)) {
+		$groups .= "<option value='".$row["name"]."' label = '".$row["tax"]."'  data-xyz = '".$row["tax"]."' >";
+	}
+	$groups .=	"</datalist>";
+	echo $groups;
 }	
 ?>
