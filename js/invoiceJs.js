@@ -80,9 +80,9 @@ function addRow() {
 	cell2.innerHTML = "<input type='text' class='barcode' name='barcode' placeholder='Svītrkods' />";
 	cell3.innerHTML = "<input type='text' class='serNumber' name='serNumber' placeholder='Seriāla numurs' />";
 	cell4.innerHTML = "<input type='text' class='itemGroup' name='itemGroup' placeholder='Preču grupa' list='prodGroups' />";
-	cell5.innerHTML = "<input type='text' class='amount' name='amount' placeholder='Daudzums' onkeypress='return isNumberKey(event)' />";
-	cell6.innerHTML = "<input type='text' class='priceIn' name='priceIn' placeholder='Ienākoša cena' onkeypress='return isNumberKey(event)' />";
-	cell7.innerHTML = "<input type='text' class='tax' name='tax' placeholder='PVN' onkeypress='return isNumberKey(event)' />";
+	cell5.innerHTML = "<input type='text' class='amount' name='amount' placeholder='Daudzums' onkeypress='return isNumberKey(event,this.value)' />";
+	cell6.innerHTML = "<input type='text' class='priceIn' name='priceIn' placeholder='Ienākoša cena' onkeypress='return isNumberKey(event,this.value)' />";
+	cell7.innerHTML = "<input type='text' class='tax' name='tax' placeholder='PVN' onkeypress='return isNumberKey(event,this.value)' />";
 	cell8.innerHTML = "<input type='text' class='subTotal' name='subTotal' placeholder='Summa' value='0' readonly/>";
 		
 	changeRowValue($('#productTable tr:last'));
@@ -127,10 +127,11 @@ function calulateRowValue(row){
 	document.getElementById("product").innerText = "Prece: " + total.toFixed(2);
 }
 
-function isNumberKey(evt){
+function isNumberKey(evt, value){
 	var charCode = (evt.which) ? evt.which : event.keyCode
-	if (charCode == 46 || charCode > 47 && charCode < 58)
+	if (charCode == 46 && value.indexOf(".") == -1 || charCode > 47 && charCode < 58){
 		return true;
+	}
 	return false;
 }
 

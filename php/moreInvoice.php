@@ -95,10 +95,10 @@ function companyDetails($panelId,$id) {
 				"<div class='panel' id = '$panelId'>
 					<div class='container'>
 						<input type='text' id='title' placeholder='Kompānijas nosaukums' value='".$row["name"]."'/>
-						<input type='text' id='reNumber' placeholder='Kompānijas reģistrācijas numurs' onkeypress='return isNumberKey(event)' value='".$row["regNumber"]."'/>
+						<input type='text' id='reNumber' placeholder='Kompānijas reģistrācijas numurs' value='".$row["regNumber"]."'/>
 						<input type='text' id='location' placeholder='Kompānijas juridiskā adrese' value='".$row["location"]."'/>
 						<input type='text' id='address' placeholder='Kompānijas faktiskā adrese' value='".$row["address"]."'/>
-						<input type='text' id='bank' placeholder='Kompānijas konta numurs' onkeypress='return isNumberKey(event)' value='".$row["bankNumber"]."'/>
+						<input type='text' id='bank' placeholder='Kompānijas konta numurs' value='".$row["bankNumber"]."'/>
 						<input type='text' id='representative' placeholder='Kompānijas pārstāvis' value='".$row["representative"]."'/>
 					</div>
 				</div>";
@@ -108,10 +108,10 @@ function companyDetails($panelId,$id) {
 		return "<div class='panel' id = '$panelId'>
 				<div class='container'>
 					<input type='text' id='title' placeholder='Kompānijas nosaukums'/>
-					<input type='text' id='reNumber' placeholder='Kompānijas reģistrācijas numurs' onkeypress='return isNumberKey(event)'/>
+					<input type='text' id='reNumber' placeholder='Kompānijas reģistrācijas numurs'/>
 					<input type='text' id='location' placeholder='Kompānijas juridiskā adrese'/>
 					<input type='text' id='address' placeholder='Kompānijas faktiskā adrese'/>
-					<input type='text' id='bank' placeholder='Kompānijas konta numurs' onkeypress='return isNumberKey(event)'/>
+					<input type='text' id='bank' placeholder='Kompānijas konta numurs'/>
 					<input type='text' id='representative' placeholder='Kompānijas pārstāvis'/>
 				</div>
 			</div>";
@@ -174,9 +174,9 @@ function getProducts($id){
 								<td><input type='text' class='barcode' name='barcode' placeholder='Svītrkods' value='".$row["barcode"]."'/></td>
 								<td><input type='text' class='serNumber' name='serNumber' placeholder='Seriāla numurs' value='".$row["serNumber"]."'/></td>
 								<td><input type='text' class='itemGroup' name='itemGroup' placeholder='Preču grupa' list='prodGroups' value='".$row["groupName"]."'/></td>
-								<td><input type='text' class='amount' name='amount' placeholder='Daudzums' onkeypress='return isNumberKey(event)' value='1'/></td>
-								<td><input type='text' class='priceIn' name='priceIn' placeholder='Ienākoša cena' onkeypress='return isNumberKey(event)' value='".$row["incomingPrice"]."'/></td>
-								<td><input type='text' class='tax' name='tax' placeholder='PVN' onkeypress='return isNumberKey(event)' value='".$row["tax"]."'/></td>
+								<td><input type='text' class='amount' name='amount' placeholder='Daudzums' onkeypress='return isNumberKey(event,this.value)' value='1'/></td>
+								<td><input type='text' class='priceIn' name='priceIn' placeholder='Ienākoša cena' onkeypress='return isNumberKey(event,this.value)' value='".$row["incomingPrice"]."'/></td>
+								<td><input type='text' class='tax' name='tax' placeholder='PVN' onkeypress='return isNumberKey(event,this.value)' value='".$row["tax"]."'/></td>
 								<td><input type='text' class='subTotal' name='subTotal' placeholder='Summa' readonly/></td>
 							</tr>";
 			}

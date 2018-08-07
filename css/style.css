@@ -102,15 +102,7 @@
     box-sizing: border-box;
 }
 
-input[type=text], select, textarea {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    resize: vertical;
-}
-
-input[type=date], select, textarea {
+input[type=text], [type=date], select, textarea {
     width: 100%;
     padding: 12px;
     border: 1px solid #ccc;
@@ -140,11 +132,3 @@ th {
     background-color: #4CAF50;
     color: white;
 }
-
-
-
-
-$tblrow.find('.itemGroup').on('change', function () {
-				var val = $tblrow.find("[name=itemGroup]").val();
-				alert(val);				
-			}); 
