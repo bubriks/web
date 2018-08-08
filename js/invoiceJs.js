@@ -106,7 +106,7 @@ function addRow() {
 	var cell6 = row.insertCell(6);
 	var cell7 = row.insertCell(7);
 	var cell8 = row.insertCell(8);
-	cell.innerHTML = "<button class='buttonDelete' style='border-radius: 4px;' onclick='DeleteRow(this);'>Dzēst</button>";
+	cell.innerHTML = "<button class='buttonDelete' style='border-radius: 4px;' onclick='deleteRow(this);'>Dzēst</button>";
 	cell1.innerHTML = "<input type='text' class='name' name='name' placeholder='Nosaukums' />";
 	cell2.innerHTML = "<input type='text' class='barcode' name='barcode' placeholder='Svītrkods' />";
 	cell3.innerHTML = "<input type='text' class='serNumber' name='serNumber' placeholder='Seriāla numurs' />";
@@ -152,14 +152,44 @@ function calulateRowValue(row){
 }
 
 function calculateTotal(){
-	var total = 0;
-
-	$(".subTotal").each(function () {
-		var stval = parseFloat($(this).val());
-		total += isNaN(stval) ? 0 : stval;
-	});
-
-	$('.total').val(total.toFixed(2));
+	if($('.added').val() != 0){
+		var total = 0;
+		$("#productTable tbody tr").each(function (index) {
+			var $tblrow = $(this);
+			
+			calulateRowValue($tblrow);
+			val = parseFloat($tblrow.find('.subTotal').val());
+			total += val;
+		});
+		$('.total').val(total.toFixed(2));
+	
+		var transport = parseFloat($('.added').val());
+		var total = parseFloat($('.total').val());
+		var dif = (total + transport) / total;
+		
+		var $rows = $("#productTable tbody tr");
+		
+		var total = 0;
+		$rows.each(function (index) {
+			var $row = $(this);
+			
+			val = parseFloat($row.find('.subTotal').val() * dif);
+			$row.find('.subTotal').val(val);
+			total += val;
+		});
+		
+		$('.added').val(transport);
+		$('.total').val(total.toFixed(2));
+	}
+	else{
+		var total = 0;
+		$(".subTotal").each(function () {
+			var stval = parseFloat($(this).val());
+			total += isNaN(stval) ? 0 : stval;
+		});
+		$('.total').val(total.toFixed(2));
+	}
+	
 	document.getElementById("product").innerText = "Prece: " + total.toFixed(2);
 }
 
