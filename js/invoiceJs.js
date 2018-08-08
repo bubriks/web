@@ -33,8 +33,9 @@ function start(id){
 			
 			calulateRowValue($tblrow);
 		});
+		transportChanged();	
+		$("#productTable tfoot tr").find("[name=added]").val($("#productTable tfoot tr").find("[name=transport]").val());
 		calculateTotal();
-		transportChanged();		
 	}
 }
 
@@ -45,6 +46,10 @@ function transportChanged(){
 		var $tblrow = $(this);
 		
 		$tblrow.find('.transport').on('change', function () {
+			if(isNaN(parseFloat($tblrow.find("[name=transport]").val()))){
+				$tblrow.find("[name=transport]").val(0);
+			}
+			
 			var transport = parseFloat($tblrow.find("[name=transport]").val());
 			var total = parseFloat($tblrow.find("[name=total]").val()) - parseFloat($tblrow.find("[name=added]").val());
 			var dif = (total + transport) / total;
@@ -152,44 +157,34 @@ function calulateRowValue(row){
 }
 
 function calculateTotal(){
-	if($('.added').val() != 0){
-		var total = 0;
+	var total = 0;
+	if(parseFloat($('.added').val()) != 0){		
 		$("#productTable tbody tr").each(function (index) {
-			var $tblrow = $(this);
+			var $row = $(this);
 			
-			calulateRowValue($tblrow);
-			val = parseFloat($tblrow.find('.subTotal').val());
+			calulateRowValue($row);
+			val = parseFloat($row.find('.subTotal').val());
 			total += val;
 		});
-		$('.total').val(total.toFixed(2));
 	
-		var transport = parseFloat($('.added').val());
-		var total = parseFloat($('.total').val());
-		var dif = (total + transport) / total;
-		
-		var $rows = $("#productTable tbody tr");
-		
+		var dif = (total + parseFloat($('.added').val())) / total;
+				
 		var total = 0;
-		$rows.each(function (index) {
+		$("#productTable tbody tr").each(function (index) {
 			var $row = $(this);
 			
 			val = parseFloat($row.find('.subTotal').val() * dif);
 			$row.find('.subTotal').val(val);
 			total += val;
 		});
-		
-		$('.added').val(transport);
-		$('.total').val(total.toFixed(2));
 	}
 	else{
-		var total = 0;
 		$(".subTotal").each(function () {
 			var stval = parseFloat($(this).val());
 			total += isNaN(stval) ? 0 : stval;
 		});
-		$('.total').val(total.toFixed(2));
 	}
-	
+	$('.total').val(total.toFixed(2));
 	document.getElementById("product").innerText = "Prece: " + total.toFixed(2);
 }
 

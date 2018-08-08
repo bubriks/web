@@ -124,6 +124,10 @@ function getProducts($id){
 	$sql = "SELECT name, tax FROM productgroup";
 
 	$list = mysqli_query($conn, $sql);
+	
+	$sql = "SELECT transport FROM registry WHERE $id";
+
+	$transport = mysqli_query($conn, $sql);
 
 	$products = 
 		"<div class='panel'>
@@ -149,7 +153,7 @@ function getProducts($id){
 							<td></td>
 							<td></td>
 							<td colspan='2'><h3 style='text-align:right;'>Transporta izdevumi:</h3></td>
-							<td><input type='text' class='transport' name='transport' placeholder='Transporta izdevumi' onkeypress='return isNumberKey(event,this.value)' value='0.0'/></td>
+							<td><input type='text' class='transport' name='transport' placeholder='Transporta izdevumi' onkeypress='return isNumberKey(event,this.value)' value='".mysqli_fetch_assoc($transport)["transport"]."'/></td>
 							<td><h3 style='text-align:right;'>Summa:</h3></td>
 							<td><input type='hidden' name='added' class='added' value='0'/><input type='text' class='total' name='total' placeholder='0.00' readonly/></td>
 						</tr>
@@ -168,16 +172,16 @@ function getProducts($id){
 			
 			while($row = mysqli_fetch_assoc($result)) {
 				 $products .= "<tr>
-								<td><button class='buttonDelete' style='border-radius: 4px;' onclick='deleteRow(this);'>Dzēst</button></td>
-								<td><input type='text' class='name' name='name' placeholder='Nosaukums' value='".$row["name"]."'/></td>
-								<td><input type='text' class='barcode' name='barcode' placeholder='Svītrkods' value='".$row["barcode"]."'/></td>
-								<td><input type='text' class='serNumber' name='serNumber' placeholder='Seriāla numurs' value='".$row["serNumber"]."'/></td>
-								<td><input type='text' class='itemGroup' name='itemGroup' placeholder='Preču grupa' list='prodGroups' value='".$row["groupName"]."'/></td>
-								<td><input type='text' class='amount' name='amount' placeholder='Daudzums' onkeypress='return isNumberKey(event,this.value)' value='1'/></td>
-								<td><input type='text' class='priceIn' name='priceIn' placeholder='Ienākoša cena' onkeypress='return isNumberKey(event,this.value)' value='".$row["incomingPrice"]."'/></td>
-								<td><input type='text' class='tax' name='tax' placeholder='PVN' onkeypress='return isNumberKey(event,this.value)' value='".$row["tax"]."'/></td>
-								<td><input type='text' class='subTotal' name='subTotal' placeholder='Summa' readonly/></td>
-							</tr>";
+						<td><button class='buttonDelete' style='border-radius: 4px;' onclick='deleteRow(this);'>Dzēst</button></td>
+						<td><input type='text' class='name' name='name' placeholder='Nosaukums' value='".$row["name"]."'/></td>
+						<td><input type='text' class='barcode' name='barcode' placeholder='Svītrkods' value='".$row["barcode"]."'/></td>
+						<td><input type='text' class='serNumber' name='serNumber' placeholder='Seriāla numurs' value='".$row["serNumber"]."'/></td>
+						<td><input type='text' class='itemGroup' name='itemGroup' placeholder='Preču grupa' list='prodGroups' value='".$row["groupName"]."'/></td>
+						<td><input type='text' class='amount' name='amount' placeholder='Daudzums' onkeypress='return isNumberKey(event,this.value)' value='1'/></td>
+						<td><input type='text' class='priceIn' name='priceIn' placeholder='Ienākoša cena' onkeypress='return isNumberKey(event,this.value)' value='".$row["incomingPrice"]."'/></td>
+						<td><input type='text' class='tax' name='tax' placeholder='PVN' onkeypress='return isNumberKey(event,this.value)' value='".$row["tax"]."'/></td>
+						<td><input type='text' class='subTotal' name='subTotal' placeholder='Summa' readonly/></td>
+					</tr>";
 			}
 		}
 	}
