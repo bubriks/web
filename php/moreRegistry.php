@@ -17,7 +17,7 @@ $search =
 function getRegistry(){
 	$conn = mysqli_connect("localhost", "root", "", "meansdb");
 	
-	$sql = "SELECT registry.id, receptionDate, company.name, company.bankNumber, paymentDate, docNumber, 
+	$sql = "SELECT registry.id, receptionDate, company.name, company.bankNumber, paymentDate, docNumber, transport,
 			SUM(item.incomingPrice) as incomingPrice, SUM(item.incomingPrice * (productgroup.tax / 100)) as tax FROM registry
 			INNER JOIN representative on representative.id = registry.senderId
 			INNER JOIN company on company.id = representative.companyId
@@ -65,7 +65,7 @@ function getRegistry(){
 								<td><input type='text' value='$ser' readonly/></td>
 								<td><input type='text' value='$num' readonly/></td>
 								<td><input type='text' value='".$row["incomingPrice"]."' readonly/></td>
-								<td><input type='text' readonly/></td>
+								<td><input type='text' value='".$row["transport"]."' readonly/></td>
 								<td><input type='text' readonly/></td>
 								<td><input type='text' value='".$row["tax"]."' readonly/></td>
 								<td><input type='text' value='".($row["incomingPrice"] + $row["tax"])."' readonly/></td>
