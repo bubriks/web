@@ -151,7 +151,7 @@ function getProducts($id){
 							<td colspan='2'><h3 style='text-align:right;'>Transporta izdevumi:</h3></td>
 							<td><input type='text' class='transport' name='transport' placeholder='Transporta izdevumi' onkeypress='return isNumberKey(event,this.value)' value='0.0'/></td>
 							<td><h3 style='text-align:right;'>Summa:</h3></td>
-							<td><input type='text' class='total' name='total' placeholder='0.00' readonly/></td>
+							<td><input type='hidden' name='added' class='added' value='0'/><input type='text' class='total' name='total' placeholder='0.00' readonly/></td>
 						</tr>
 					</tfoot>
 				<tbody>";
@@ -168,7 +168,7 @@ function getProducts($id){
 			
 			while($row = mysqli_fetch_assoc($result)) {
 				 $products .= "<tr>
-								<td><button class='buttonDelete' style='border-radius: 4px;' onclick='DeleteRow(this);'>Dzēst</button></td>
+								<td><button class='buttonDelete' style='border-radius: 4px;' onclick='deleteRow(this);'>Dzēst</button></td>
 								<td><input type='text' class='name' name='name' placeholder='Nosaukums' value='".$row["name"]."'/></td>
 								<td><input type='text' class='barcode' name='barcode' placeholder='Svītrkods' value='".$row["barcode"]."'/></td>
 								<td><input type='text' class='serNumber' name='serNumber' placeholder='Seriāla numurs' value='".$row["serNumber"]."'/></td>
@@ -193,7 +193,7 @@ function getProducts($id){
 	
 	$groups = "<datalist id='prodGroups'>";
 	while($row = mysqli_fetch_assoc($list)) {
-		$groups .= "<option value='".$row["name"]."' label = '".$row["tax"]."'  data-xyz = '".$row["tax"]."' >";
+		$groups .= "<option value='".$row["name"]."' label = '".$row["tax"]."'  data-tax = '".$row["tax"]."' >";
 	}
 	$groups .=	"</datalist>";
 	echo $groups;

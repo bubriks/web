@@ -33,27 +33,38 @@ function start(id){
 			
 			calulateRowValue($tblrow);
 		});
-
-		var $tblrows = $("#productTable tfoot tr");
-
-		$tblrows.each(function (index) {
-			var $tblrow = $(this);
-			
-			$tblrow.find('.transport').on('change', function () {
-				var transport = parseFloat($tblrow.find("[name=transport]").val());
-				var total = parseFloat($tblrow.find("[name=total]").val());
-				var dif = (total + transport) / total;
-				
-				var $rows = $("#productTable tbody tr");
-				//subtotals
-				$rows.each(function (index) {
-					var $row = $(this);
-					
-					$row.find('.subTotal').val($row.find('.subTotal').val() * dif);
-				});
-			}); 
-		});
+		calculateTotal();
+		transportChanged();		
 	}
+}
+
+function transportChanged(){
+	var $tblrows = $("#productTable tfoot tr");
+
+	$tblrows.each(function (index) {
+		var $tblrow = $(this);
+		
+		$tblrow.find('.transport').on('change', function () {
+			var transport = parseFloat($tblrow.find("[name=transport]").val());
+			var total = parseFloat($tblrow.find("[name=total]").val()) - parseFloat($tblrow.find("[name=added]").val());
+			var dif = (total + transport) / total;
+			
+			var $rows = $("#productTable tbody tr");
+			
+			var total = 0;
+			$rows.each(function (index) {
+				var $row = $(this);
+				
+				calulateRowValue($row);
+				
+				val = parseFloat($row.find('.subTotal').val() * dif);
+				$row.find('.subTotal').val(val);
+				total += val;
+			});
+			$tblrow.find("[name=added]").val(transport);
+			$tblrow.find("[name=total]").val(total.toFixed(2));
+		}); 
+	});
 }
 
 function documentClick(){
@@ -111,15 +122,17 @@ function addRow() {
 function changeRowValue(row){
 	row.find('.itemGroup').on('change', function () {
 		var val = row.find("[name=itemGroup]").val();
-		var xyz = $('#prodGroups option').filter(function() {
+		var tax = $('#prodGroups option').filter(function() {
 			return this.value == val;
-		}).data('xyz');
-		row.find("[name=tax]").val(xyz);
+		}).data('tax');
+		row.find("[name=tax]").val(tax);
 		calulateRowValue(row);
+		calculateTotal();
 	}); 
 	
 	row.find('.amount, .priceIn, .tax').on('change', function () {
 		calulateRowValue(row);
+		calculateTotal();
 	});
 }
 
@@ -136,6 +149,9 @@ function calulateRowValue(row){
 	else{
 		row.find('.subTotal').val(0);
 	}
+}
+
+function calculateTotal(){
 	var total = 0;
 
 	$(".subTotal").each(function () {
@@ -155,7 +171,7 @@ function isNumberKey(evt, value){
 	return false;
 }
 
-function DeleteRow(btndel){
+function deleteRow(btndel){
 	if (typeof(btndel) == "object") {
 		$(btndel).closest("tr").remove();
 		
