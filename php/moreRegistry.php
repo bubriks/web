@@ -68,7 +68,7 @@ function getRegistry(){
 								<td><input type='text' value='".$row["transport"]."' readonly/></td>
 								<td><input type='text' readonly/></td>
 								<td><input type='text' value='".$row["tax"]."' readonly/></td>
-								<td><input type='text' value='".($row["incomingPrice"] + $row["tax"])."' readonly/></td>
+								<td><input type='text' value='".($row["incomingPrice"] + $row["tax"] + $row["transport"])."' readonly/></td>
 								<td><form action='invoice.php' method='post'>
 									<input type='hidden' name='id' value='".$row["id"]."'/>
 									<input type='submit' name='submit' value='Lasīt vairāk' onclick='readMore()' class='buttonAdd'/>

@@ -2,6 +2,7 @@
 <html>
 	<head>
 		<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+		<script src="js/jquery.json.min.js"></script>
 		<script src="js/invoiceJs.js"></script>
 		<link rel="stylesheet" href="css/style.css" />	
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -27,7 +28,7 @@
 			getProducts($id);
 		?>
 		
-		<button class="buttonSave" onclick="location.href = 'registry.php';">Apstiprināt</button>
+		<button class="buttonSave" onclick="saveInfo()">Apstiprināt</button>
 		
 		<button class="buttonDelete" onclick="location.href = 'registry.php';">Dzēst</button>
 		

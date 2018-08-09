@@ -166,7 +166,7 @@ function getProducts($id){
 				<tbody>";
 		
 	if($id!=0){
-		$sql = "SELECT product.name, product.barcode, item.serNumber, productgroup.name as groupName, item.incomingPrice, productgroup.tax FROM items 
+		$sql = "SELECT product.name, product.barcode, item.serNumber, productgroup.name as groupName, item.incomingPrice, productgroup.tax, item.id FROM items 
 				INNER JOIN item ON items.itemId = item.id 
 				INNER JOIN product ON item.productId = product.id 
 				INNER JOIN productgroup ON product.productGroupId = productgroup.id WHERE items.registryId = $id";
@@ -177,7 +177,7 @@ function getProducts($id){
 			
 			while($row = mysqli_fetch_assoc($result)) {
 				 $products .= "<tr>
-						<td><button class='buttonDelete' style='border-radius: 4px;' onclick='deleteRow(this);'>Dzēst</button></td>
+						<td><input type='hidden' name='id' class='id' value='".$row["id"]."'/><button class='buttonDelete' style='border-radius: 4px;' onclick='deleteRow(this);'>Dzēst</button></td>
 						<td><input type='text' class='name' name='name' placeholder='Nosaukums' value='".$row["name"]."'/></td>
 						<td><input type='text' class='barcode' name='barcode' placeholder='Svītrkods' value='".$row["barcode"]."'/></td>
 						<td><input type='text' class='serNumber' name='serNumber' placeholder='Seriāla numurs' value='".$row["serNumber"]."'/></td>

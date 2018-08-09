@@ -111,7 +111,7 @@ function addRow() {
 	var cell6 = row.insertCell(6);
 	var cell7 = row.insertCell(7);
 	var cell8 = row.insertCell(8);
-	cell.innerHTML = "<button class='buttonDelete' style='border-radius: 4px;' onclick='deleteRow(this);'>Dzēst</button>";
+	cell.innerHTML = "<input type='hidden' name='id' class='id' value='0'/><button class='buttonDelete' style='border-radius: 4px;' onclick='deleteRow(this);'>Dzēst</button>";
 	cell1.innerHTML = "<input type='text' class='name' name='name' placeholder='Nosaukums' />";
 	cell2.innerHTML = "<input type='text' class='barcode' name='barcode' placeholder='Svītrkods' />";
 	cell3.innerHTML = "<input type='text' class='serNumber' name='serNumber' placeholder='Seriāla numurs' />";
@@ -204,4 +204,32 @@ function deleteRow(btndel){
 	} else {
 		return false;
 	}
+}
+
+function saveInfo(){
+	var TableData = new Array();
+    
+	$('#productTable tbody tr').each(function(row, tr){
+		TableData[row]={
+			"id" :$(tr).find('[name=id]').val(),
+			"name" :$(tr).find('[name=name]').val(),
+			"barcode" : $(tr).find('[name=barcode]').val(),
+			"serNumber" : $(tr).find('[name=serNumber]').val(),
+			"itemGroup" : $(tr).find('[name=itemGroup]').val(),
+			"amount" : $(tr).find('[name=amount]').val(),
+			"priceIn" : $(tr).find('[name=priceIn]').val(),
+			"tax" : $(tr).find('[name=tax]').val()
+		}
+	});
+	
+	TableData = $.toJSON(TableData);
+	
+	$.ajax({
+		type: "POST",
+		url: "php/saveInvoice.php",
+		data: "pTableData=" + TableData,
+		success: function(msg){
+			alert(msg);
+		}
+	});
 }
