@@ -16,7 +16,7 @@
 		echo "<body onload='start($id)'>"
 	?>
 	
-		<h2 style="text-align:center;">Pavadzīme</h2>
+		<a href="registry.php"><h2 style="text-align:center;">Pavadzīme</h2></a>
 		<!-- company -->
 		<?php
 			getCompanyDetails($id)

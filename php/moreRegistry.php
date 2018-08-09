@@ -24,7 +24,7 @@ function getRegistry(){
 			INNER JOIN items on items.registryId = registry.id
 			INNER JOIN item on item.id = items.itemId
 			INNER JOIN product on product.id = item.productId
-			INNER JOIN productgroup on productgroup.id = product.productGroupId";
+			INNER JOIN productgroup on productgroup.id = product.productGroupId order by registry.id desc limit 50";
 
 	$result = mysqli_query($conn, $sql);
 	
