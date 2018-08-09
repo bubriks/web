@@ -3,7 +3,8 @@ augsup un lejuplade
 
 ja vienads sernumber vai nav tad jaskata daudzumu
 kopeja summa par laiku registry
-if change tax name chnages
+
+sglabat izmainas (update invoice)
 
 //////////////////////////////////////////
 

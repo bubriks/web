@@ -128,6 +128,11 @@ function getProducts($id){
 	$sql = "SELECT transport FROM registry WHERE $id";
 
 	$transport = mysqli_query($conn, $sql);
+	
+	$added = mysqli_fetch_assoc($transport)["transport"];
+	if($added == null){
+		$added = 0;
+	}
 
 	$products = 
 		"<div class='panel'>
@@ -153,7 +158,7 @@ function getProducts($id){
 							<td></td>
 							<td></td>
 							<td colspan='2'><h3 style='text-align:right;'>Transporta izdevumi:</h3></td>
-							<td><input type='text' class='transport' name='transport' placeholder='Transporta izdevumi' onkeypress='return isNumberKey(event,this.value)' value='".mysqli_fetch_assoc($transport)["transport"]."'/></td>
+							<td><input type='text' class='transport' name='transport' placeholder='Transporta izdevumi' onkeypress='return isNumberKey(event,this.value)' value='$added'/></td>
 							<td><h3 style='text-align:right;'>Summa:</h3></td>
 							<td><input type='hidden' name='added' class='added' value='0'/><input type='text' class='total' name='total' placeholder='0.00' readonly/></td>
 						</tr>

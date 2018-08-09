@@ -16,8 +16,6 @@ function start(id){
 	acc[acc.length -1].nextElementSibling.style.display = "block";
 	acc[acc.length -1].classList.toggle("active");
 	
-	addRow();
-	
 	if(id>0){
 		documentClick();
 		dateClick();
@@ -33,10 +31,12 @@ function start(id){
 			
 			calulateRowValue($tblrow);
 		});
-		transportChanged();	
 		$("#productTable tfoot tr").find("[name=added]").val($("#productTable tfoot tr").find("[name=transport]").val());
 		calculateTotal();
 	}
+	
+	addRow();
+	transportChanged();	
 }
 
 function transportChanged(){
@@ -200,15 +200,7 @@ function deleteRow(btndel){
 	if (typeof(btndel) == "object") {
 		$(btndel).closest("tr").remove();
 		
-		var total = 0;
-
-		$(".subTotal").each(function () {
-			var stval = parseFloat($(this).val());
-			total += isNaN(stval) ? 0 : stval;
-		});
-
-		$('.total').val(total.toFixed(2));
-		document.getElementById("product").innerText = "Prece: " + total.toFixed(2);
+		calculateTotal();
 	} else {
 		return false;
 	}
