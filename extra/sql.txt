@@ -1,24 +1,53 @@
-<?php echo $_SERVER['PHP_SELF']; ?>
+CREATE DATABASE MeansDB;
 
-onclick="location.href = 'invoice.php';"
+CREATE TABLE company(
+    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(30) NOT NULL,
+    regNumber VARCHAR(30) NOT NULL,
+    location VARCHAR(50) NOT NULL,
+    address VARCHAR(50) NOT NULL,
+    bankNumber VARCHAR(30) NOT NULL
+);
 
+CREATE TABLE representative(
+    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    companyId INT NOT NULL REFERENCES company(id),
+    name VARCHAR(30) NOT NULL
+);
 
-SELECT representative.name as representative, company.name, company.regNumber, company.location, company.address, company.bankNumber FROM representative INNER JOIN company ON representative.companyId = company.id where representative.id=1
+CREATE TABLE registry(
+    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    senderId INT NOT NULL REFERENCES representative(id),
+	receiverId INT NOT NULL REFERENCES representative(id),
+	transport DECIMAL(2) NOT NULL,
+	docNumber VARCHAR(30) NOT NULL,
+	prescriptionDate TIMESTAMP NOT NULL,
+	receptionDate TIMESTAMP NOT NULL,
+	paymentDate TIMESTAMP NOT NULL
+);
 
-INSERT INTO company(name, regNumber, location, address, bankNumber) VALUES ("means","23423423","Kurzemes 29","Tukums","11111111")
+CREATE TABLE productGroup(
+    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+	name VARCHAR(30) NOT NULL,
+	tax INT NOT NULL
+);
 
-INSERT INTO representative(companyId, name) VALUES (1,"Arnis")
+CREATE TABLE product(
+    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    productGroupId INT NOT NULL REFERENCES productGroup(id),
+	name VARCHAR(30) NOT NULL,
+    barcode VARCHAR(30) NOT NULL
+);
 
-INSERT INTO registry(senderId, receiverId, docNumber, prescriptionDate, receptionDate, paymentDate) VALUES (2,1,"WX-DD 324435346",'2000/01/01','2002/01/01','2010/01/01')
+CREATE TABLE item(
+    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    productId INT NOT NULL REFERENCES product(id),
+	serNumber VARCHAR(30) NOT NULL,
+	incomingPrice DECIMAL(2) NOT NULL
+);
 
-INSERT INTO productgroup(name, tax) VALUES ("Datori",20),("Lietotaj prog",0)
-
-SELECT product.name, product.barcode, item.serNumber, productgroup.name as groupName, item.incomingPrice, productgroup.tax FROM items INNER JOIN item ON items.itemId = item.id INNER JOIN product ON item.productId = product.id INNER JOIN productgroup ON product.productGroupId = productgroup.id WHERE items.registryId = 1
-
-SELECT registry.id, receptionDate, company.name, company.bankNumber, paymentDate, docNumber, SUM(item.incomingPrice) as incomingPrice, SUM(item.incomingPrice * (productgroup.tax / 100)) as tax FROM registry
-INNER JOIN representative on representative.id = registry.senderId
-INNER JOIN company on company.id = representative.companyId
-INNER JOIN items on items.registryId = registry.id
-INNER JOIN item on item.id = items.itemId
-INNER JOIN product on product.id = item.productId
-INNER JOIN productgroup on productgroup.id = product.productGroupId
+CREATE TABLE items(
+    registryId INT NOT NULL REFERENCES registry(id),
+	itemId INT NOT NULL REFERENCES itme(id),
+    PRIMARY KEY (registryId, itemId)
+);

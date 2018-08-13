@@ -86,22 +86,32 @@ function companyDetails($panelId,$id) {
 				FROM representative INNER JOIN company ON representative.companyId = company.id WHERE representative.id=$id";
 
 		$result = mysqli_query($conn, $sql);
+		
+		$sql = "SELECT name FROM representative WHERE representative.companyId = $id";
+		
+		$list = mysqli_query($conn, $sql);
+		
 		mysqli_close($conn);
 		
 		if (mysqli_num_rows($result) > 0) {
 			$row = mysqli_fetch_assoc($result);
 			
-			return 
-				"<div class='panel' id = '$panelId'>
+			$groups ="<div class='panel' id = '$panelId'>
 					<div class='container'>
 						<input type='text' id='title' placeholder='Kompānijas nosaukums' value='".$row["name"]."'/>
 						<input type='text' id='reNumber' placeholder='Kompānijas reģistrācijas numurs' value='".$row["regNumber"]."'/>
 						<input type='text' id='location' placeholder='Kompānijas juridiskā adrese' value='".$row["location"]."'/>
 						<input type='text' id='address' placeholder='Kompānijas faktiskā adrese' value='".$row["address"]."'/>
 						<input type='text' id='bank' placeholder='Kompānijas konta numurs' value='".$row["bankNumber"]."'/>
-						<input type='text' id='representative' placeholder='Kompānijas pārstāvis' value='".$row["representative"]."'/>
+						<input type='text' id='representative' placeholder='Kompānijas pārstāvis' list='".$panelId."Groups' value='".$row["representative"]."'/>
 					</div>
-				</div>";
+				</div>
+			<datalist id='".$panelId."Groups'>";
+			while($row = mysqli_fetch_assoc($list)) {
+				$groups .= "<option value='".$row["name"]."'>";
+			}
+			$groups .=	"</datalist>";
+			return $groups;
 		}
 	}
 	else{

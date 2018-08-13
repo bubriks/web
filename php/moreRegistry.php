@@ -55,7 +55,10 @@ function getRegistry(){
 		while($row = mysqli_fetch_assoc($result)) {
 			$arr = explode(" ", $row["docNumber"], 2);
 			$ser = $arr[0];
-			$num = $arr[1];
+			$num = "";
+			if(sizeof($arr) > 1){
+				$num = $arr[1];
+			}
 			
 			$registries .= "<tr>
 								<td><input type='text' value='".$row["receptionDate"]."' readonly/></td>
