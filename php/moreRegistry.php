@@ -30,9 +30,7 @@ function getRegistry(){
 	
 	mysqli_close($conn);
 	
-	if (mysqli_num_rows($result) > 0) {
-		
-		$registries = "<div class='container' style='padding: 0px;'>
+	$registries = "<div class='container' style='padding: 0px;'>
 			<table id='ducuments'>
 				<thead>
 					<tr>
@@ -51,6 +49,8 @@ function getRegistry(){
 					</tr>
 				</thead>
 				<tbody>";
+	
+	if (mysqli_num_rows($result) > 0) {
 		
 		while($row = mysqli_fetch_assoc($result)) {
 			$arr = explode(" ", $row["docNumber"], 2);
@@ -84,30 +84,10 @@ function getRegistry(){
 				</table>
 			</div>";
 	}
-	else{
-		$registries = "<div class='container' style='padding: 0px;'>
-			<table id='ducuments'>
-				<thead>
-					<tr>
-						<th>Datums</th>
-						<th>PP-R. norādītais darījuma partneris</th>
-						<th>Citi rekvizīti</th>
-						<th>Datums</th>
-						<th>Sērija</th>
-						<th>Numurs</th>
-						<th>Darijuma vērtība bez PVN</th>
-						<th>Transporta izdevumi</th>
-						<th>Atlaide</th>
-						<th>PVN summa</th>
-						<th>Kopējā summa</th>
-						<th>Papildus</th>
-					</tr>
-				</thead>
-				<tbody>
-				</tbody>
-			</table>
-		</div>";
-	};
+	$registries .= "</tbody>
+				</table>
+			</div>";
+			
 	echo $registries;
 }
 ?>

@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 	$data = stripcslashes($_POST['data']);
 	$data = json_decode($data,TRUE);
 	
