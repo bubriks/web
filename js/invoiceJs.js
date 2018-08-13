@@ -230,7 +230,7 @@ function saveInfo(id){
 	receiver = [document.querySelector("#divReceiver").querySelector("#title").value, document.querySelector("#divReceiver").querySelector("#reNumber").value, 
 		document.querySelector("#divReceiver").querySelector("#location").value, document.querySelector("#divReceiver").querySelector("#address").value, 
 		document.querySelector("#divReceiver").querySelector("#bank").value, document.querySelector("#divReceiver").querySelector("#representative").value];
-	transport = $("#productTable tfoot tr").find("[name=added]").val($("#productTable tfoot tr").find("[name=transport]").val());	
+	transport = $("#productTable tfoot tr").find("[name=transport]").val();	
 	data = [id,document.getElementById("number").value, dates, sender, receiver, transport,TableData];
 	data = $.toJSON(data);
 	
