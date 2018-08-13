@@ -28,9 +28,5 @@
 			getProducts($id);
 		?>
 		
-		<button class="buttonSave" onclick="saveInfo()">Apstiprināt</button>
-		
-		<button class="buttonDelete" onclick="location.href = 'registry.php';">Dzēst</button>
-		
 	</body>
 </html>

@@ -204,7 +204,9 @@ function getProducts($id){
 	while($row = mysqli_fetch_assoc($list)) {
 		$groups .= "<option value='".$row["name"]."' label = '".$row["tax"]."'  data-tax = '".$row["tax"]."' >";
 	}
-	$groups .=	"</datalist>";
+	$groups .=	"</datalist>
+		<button class='buttonSave' onclick='saveInfo($id)'>Apstiprināt</button>
+		<button class='buttonDelete' onclick='location.href = \"registry.php\";'>Dzēst</button>";
 	echo $groups;
 }	
 

@@ -206,7 +206,7 @@ function deleteRow(btndel){
 	}
 }
 
-function saveInfo(){
+function saveInfo(id){
 	var TableData = new Array();
     
 	$('#productTable tbody tr').each(function(row, tr){
@@ -222,12 +222,22 @@ function saveInfo(){
 		}
 	});
 	
-	TableData = $.toJSON(TableData);
+	
+	dates = [document.getElementById("preDate").value,document.getElementById("recDate").value,document.getElementById("paymentDate").value];
+	sender = [document.querySelector("#divSender").querySelector("#title").value, document.querySelector("#divSender").querySelector("#reNumber").value, 
+		document.querySelector("#divSender").querySelector("#location").value, document.querySelector("#divSender").querySelector("#address").value, 
+		document.querySelector("#divSender").querySelector("#bank").value, document.querySelector("#divSender").querySelector("#representative").value];
+	receiver = [document.querySelector("#divReceiver").querySelector("#title").value, document.querySelector("#divReceiver").querySelector("#reNumber").value, 
+		document.querySelector("#divReceiver").querySelector("#location").value, document.querySelector("#divReceiver").querySelector("#address").value, 
+		document.querySelector("#divReceiver").querySelector("#bank").value, document.querySelector("#divReceiver").querySelector("#representative").value];
+	transport = $("#productTable tfoot tr").find("[name=added]").val($("#productTable tfoot tr").find("[name=transport]").val());	
+	data = [id,document.getElementById("number").value, dates, sender, receiver, transport,TableData];
+	data = $.toJSON(data);
 	
 	$.ajax({
 		type: "POST",
 		url: "php/saveInvoice.php",
-		data: "pTableData=" + TableData,
+		data: "data=" + data,
 		success: function(msg){
 			alert(msg);
 		}
