@@ -125,8 +125,7 @@ function addRow() {
 }
 
 function changeRowValue(row){
-	row.find('.divSender').on('change', function () {
-		divReceiver
+	row.find('.itemGroup').on('change', function () {
 		var val = row.find("[name=itemGroup]").val();
 		var tax = $('#prodGroups option').filter(function() {
 			return this.value == val;
