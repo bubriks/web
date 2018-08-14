@@ -21,31 +21,31 @@ function getCompanyDetails($id){
 		$receiver = companyDetails('divReceiver',$row["receiverId"]);
 		
 		echo "<!-- Number of document -->
-			<button class='accordion' id='docNumber' onclick='documentClick()'>Dokuments</button>
+			<input type='button' class='accordion' name='docNumber' value='Dokuments'>
 			<div class='panel'>
-				<div class='container'>
-					<input type='text' id='number' placeholder='Dokumenta numurs' value='".$row["docNumber"]."'>
+				<div class='container' id='doc'>
+					<input type='text' class='number' name='number' placeholder='Dokumenta numurs' value=''>
 					<input type='file' accept='.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel'/>
 					<button class='buttonDownload' style='float: right;'><i class='fa fa-download'></i> Lejuplādēt</button>
 				</div>
 			</div>
 			
 			<!-- Date -->
-			<button class='accordion' id='date' onclick='dateClick()'>Datums</button>
+			<input type='button' class='accordion' name='date' value='Datums'>
 			<div class='panel'>
-				<div class='container'>
-					<input type='date' id='preDate' placeholder='Izrakstīšanas datums' value='".date('Y-m-d',strtotime($row["prescriptionDate"]))."'>
-					<input type='date' id='recDate' placeholder='Saņemšanas datums' value='".date('Y-m-d',strtotime($row["receptionDate"]))."'>
-					<input type='date' id='paymentDate' placeholder='Apmaksas datums' value='".date('Y-m-d',strtotime($row["paymentDate"]))."'>
+				<div class='container' id='dates'>
+					<input type='date' name='preDate' class='preDate' placeholder='Izrakstīšanas datums' value='".date('Y-m-d',strtotime($row["prescriptionDate"]))."'>
+					<input type='date' name='recDate' class='recDate' placeholder='Saņemšanas datums' value='".date('Y-m-d',strtotime($row["receptionDate"]))."'>
+					<input type='date' name='paymentDate' class='paymentDate' placeholder='Apmaksas datums' value='".date('Y-m-d',strtotime($row["paymentDate"]))."'>
 				</div>
 			</div>
 			
 			<!-- Deliverer -->
-			<button class='accordion' id='sender' onclick=\"companyClick('divSender')\">Preču piegādātājs</button>
+			<input type='button' class='accordion' name='sender' value='Preču piegādātājs'>
 			$sender
 
 			<!-- Receiver -->
-			<button class='accordion' id='receiver' onclick=\"companyClick('divReceiver')\">Preču saņēmējs</button>
+			<input type='button' class='accordion' name='receiver' value='Preču saņēmējs'>
 			$receiver";
 	}
 	else{
@@ -53,31 +53,31 @@ function getCompanyDetails($id){
 		$receiver = companyDetails('divReceiver',0);
 		
 		echo "<!-- Number of document -->
-			<button class='accordion' id='docNumber' onclick='documentClick()'>Dokuments</button>
+			<input type='button' class='accordion' name='docNumber' value='Dokuments'>
 			<div class='panel'>
-				<div class='container'>
-					<input type='text' id='number' placeholder='Dokumenta numurs'>
+				<div class='container' id='doc'>
+					<input type='text' class='number' name='number' placeholder='Dokumenta numurs' value=''>
 					<input type='file' accept='.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel'/>
 					<button class='buttonDownload' style='float: right;'><i class='fa fa-download'></i> Lejuplādēt</button>
 				</div>
 			</div>
 			
 			<!-- Date -->
-			<button class='accordion' id='date' onclick='dateClick()'>Datums</button>
+			<input type='button' class='accordion' name='date' value='Datums'>
 			<div class='panel'>
-				<div class='container'>
-					<input type='date' id='preDate' placeholder='Izrakstīšanas datums'>
-					<input type='date' id='recDate' placeholder='Saņemšanas datums'>
-					<input type='date' id='paymentDate' placeholder='Apmaksas datums'>
+				<div class='container' id='dates'>
+					<input type='date' name='preDate' class='preDate' placeholder='Izrakstīšanas datums'>
+					<input type='date' name='recDate' class='recDate' placeholder='Saņemšanas datums'>
+					<input type='date' name='paymentDate' class='paymentDate' placeholder='Apmaksas datums'>
 				</div>
 			</div>
 			
 			<!-- Deliverer -->
-			<button class='accordion' id='sender' onclick=\"companyClick('divSender')\">Preču piegādātājs</button>
+			<input type='button' class='accordion' name='sender' value='Preču piegādātājs'>
 			$sender
 
 			<!-- Receiver -->
-			<button class='accordion' id='receiver' onclick=\"companyClick('divReceiver')\">Preču saņēmējs</button>
+			<input type='button' class='accordion' name='receiver' value='Preču saņēmējs'>
 			$receiver";
 	}
 	mysqli_close($conn);
@@ -102,12 +102,12 @@ function companyDetails($panelId,$id) {
 		
 		$companyInfo = "<div class='panel' id = '$panelId'>
 				<div class='container'>
-					<input type='text' id='title' class='title' placeholder='Kompānijas nosaukums' list='Companies' value='".$row["name"]."'/>
-					<input type='text' id='reNumber' placeholder='Kompānijas reģistrācijas numurs' value='".$row["regNumber"]."'/>
-					<input type='text' id='location' placeholder='Kompānijas juridiskā adrese' value='".$row["location"]."'/>
-					<input type='text' id='address' placeholder='Kompānijas faktiskā adrese' value='".$row["address"]."'/>
-					<input type='text' id='bank' placeholder='Kompānijas konta numurs' value='".$row["bankNumber"]."'/>
-					<input type='text' id='representative' placeholder='Kompānijas pārstāvis' list='Representatives' value='".$row["representative"]."'/>
+					<input type='text' name='title' class='title' placeholder='Kompānijas nosaukums' list='Companies' value='".$row["name"]."'/>
+					<input type='text' name='reNumber' class='reNumber' placeholder='Kompānijas reģistrācijas numurs' value='".$row["regNumber"]."'/>
+					<input type='text' name='location' class='location' placeholder='Kompānijas juridiskā adrese' value='".$row["location"]."'/>
+					<input type='text' name='address' class='address' placeholder='Kompānijas faktiskā adrese' value='".$row["address"]."'/>
+					<input type='text' name='bank' class='bank' placeholder='Kompānijas konta numurs' value='".$row["bankNumber"]."'/>
+					<input type='text' name='representative' class='representative' placeholder='Kompānijas pārstāvis' list='Representatives' value='".$row["representative"]."'/>
 				</div>
 			</div>
 			$representatives";
@@ -115,12 +115,12 @@ function companyDetails($panelId,$id) {
 	else{
 		$companyInfo = "<div class='panel' id = '$panelId'>
 				<div class='container'>
-					<input type='text' id='title' class='title' name='title' placeholder='Kompānijas nosaukums' list='Companies'/>
-					<input type='text' id='reNumber' class='reNumber' placeholder='Kompānijas reģistrācijas numurs'/>
-					<input type='text' id='location' class='location' placeholder='Kompānijas juridiskā adrese'/>
-					<input type='text' id='address' class='address' placeholder='Kompānijas faktiskā adrese'/>
-					<input type='text' id='bank' class='bank' placeholder='Kompānijas konta numurs'/>
-					<input type='text' id='representative' class='representative' placeholder='Kompānijas pārstāvis'/>
+					<input type='text' name='title' class='title' placeholder='Kompānijas nosaukums' list='Companies' value=''/>
+					<input type='text' name='reNumber' class='reNumber' placeholder='Kompānijas reģistrācijas numurs' value=''/>
+					<input type='text' name='location' class='location' placeholder='Kompānijas juridiskā adrese' value=''/>
+					<input type='text' name='address' class='address' placeholder='Kompānijas faktiskā adrese' value=''/>
+					<input type='text' name='bank' class='bank' placeholder='Kompānijas konta numurs' value=''/>
+					<input type='text' name='representative' class='representative' placeholder='Kompānijas pārstāvis' value=''/>
 				</div>
 			</div>";
 	}

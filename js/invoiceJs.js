@@ -16,56 +16,79 @@ function start(id){
 	acc[acc.length -1].nextElementSibling.style.display = "block";
 	acc[acc.length -1].classList.toggle("active");
 	
+	companies();
+	
 	if(id>0){
-		documentClick();
-		dateClick();
-		companyClick("divSender");
-		companyClick("divReceiver");
+		$('#doc').find("[name=number]").change();
+		$('#dates').find("[name=preDate]").change();
+		$('#divSender').find("[name=title]").change();
+		$('#divReceiver').find("[name=title]").change();
 		
-		var $tblrows = $("#productTable tbody tr");
-		
-		$tblrows.each(function (index) {
+		$("#productTable tbody tr").each(function (index) {
 			var $tblrow = $(this);
 			
 			changeRowValue($tblrow);
 			
 			calulateRowValue($tblrow);
 		});
+		
 		$("#productTable tfoot tr").find("[name=added]").val($("#productTable tfoot tr").find("[name=transport]").val());
 		calculateTotal();
 	}
 	
 	addRow();
-	transportChanged();	
-	companies();
 }
 
 function companies(){
-	$('#divSender').find('.title, .reNumber, .location, .address, .bank, .representative').on('change', function () {
-		alert('test');
+	$('#doc').find('.number').on('change', function () {
+		var numberVal = " "+$('#doc').find("[name=number]").val();
+		numberVal = (numberVal==" ") ? "" : numberVal;
+		$("[name=docNumber]").val("Dokuments"+numberVal);
 	}); 
-	/*
-	$('#divSender').find('.title').on('change', function () {
-		var val = $('#divSender').find("[name=title]").val();
-		var tax = $('#Companies option').filter(function() {
-			return this.value == val;
-		}).data('id');
-		alert(tax);
-	}); */
 	
-	$('#divReceiver').find('.title').on('change', function () {
-		var val = $('#divReceiver').find("[name=title]").val();
-		var tax = $('#Companies option').filter(function() {
-			return this.value == val;
-		}).data('id');
-		alert(tax);
+	$('#dates').find('.preDate, .recDate, .paymentDate').on('change', function () {
+		var preDate = " "+$('#dates').find("[name=preDate]").val();
+		var recDate = " "+$('#dates').find("[name=recDate]").val();
+		var paymentDate = " "+$('#dates').find("[name=paymentDate]").val();
+		preDate = (preDate==" ") ? "" : preDate;
+		recDate = (recDate==" ") ? "" : recDate;
+		paymentDate = (paymentDate==" ") ? "" : paymentDate;
+		$("[name=date]").val("Datums"+preDate+recDate+paymentDate);
 	}); 
-}
+	
+	$('#divSender').find('.title, .reNumber, .location, .address, .bank, .representative').on('change', function () {
+		var titleVal = " "+$('#divSender').find("[name=title]").val();
+		var reNumberVal = " "+$('#divSender').find("[name=reNumber]").val();
+		var locationVal = " "+$('#divSender').find("[name=location]").val();
+		var addressVal = " "+$('#divSender').find("[name=address]").val();
+		var bankVal = " "+$('#divSender').find("[name=bank]").val();
+		var representativeVal = " "+$('#divSender').find("[name=representative]").val();
+		titleVal = (titleVal==" ") ? "" : titleVal;
+		reNumberVal = (reNumberVal==" ") ? "" : reNumberVal;
+		locationVal = (locationVal==" ") ? "" : locationVal;
+		addressVal = (addressVal==" ") ? "" : addressVal;
+		bankVal = (bankVal==" ") ? "" : bankVal;
+		representativeVal = (representativeVal==" ") ? "" : representativeVal;
+		$("[name=sender]").val("Preču piegādātājs"+titleVal+reNumberVal+locationVal+addressVal+bankVal+representativeVal);
+	}); 
+	
+	$('#divReceiver').find('.title, .reNumber, .location, .address, .bank, .representative').on('change', function () {
+		var titleVal = " "+$('#divReceiver').find("[name=title]").val();
+		var reNumberVal = " "+$('#divReceiver').find("[name=reNumber]").val();
+		var locationVal = " "+$('#divReceiver').find("[name=location]").val();
+		var addressVal = " "+$('#divReceiver').find("[name=address]").val();
+		var bankVal = " "+$('#divReceiver').find("[name=bank]").val();
+		var representativeVal = " "+$('#divReceiver').find("[name=representative]").val();
+		titleVal = (titleVal==" ") ? "" : titleVal;
+		reNumberVal = (reNumberVal==" ") ? "" : reNumberVal;
+		locationVal = (locationVal==" ") ? "" : locationVal;
+		addressVal = (addressVal==" ") ? "" : addressVal;
+		bankVal = (bankVal==" ") ? "" : bankVal;
+		representativeVal = (representativeVal==" ") ? "" : representativeVal;
+		$("[name=receiver]").val("Preču saņēmējs"+titleVal+reNumberVal+locationVal+addressVal+bankVal+representativeVal);
+	}); 
 
-function transportChanged(){
-	var $tblrows = $("#productTable tfoot tr");
-
-	$tblrows.each(function (index) {
+	$("#productTable tfoot tr").each(function (index) {
 		var $tblrow = $(this);
 		
 		$tblrow.find('.transport').on('change', function () {
@@ -93,33 +116,15 @@ function transportChanged(){
 			$tblrow.find("[name=total]").val(total.toFixed(2));
 		}); 
 	});
-}
-
-function documentClick(){
-	document.getElementById("docNumber").innerText = "Dokuments: " + document.getElementById("number").value;
-}
-
-function dateClick(){
-	document.getElementById("date").innerText = "Datums: " + 
-		document.getElementById("preDate").value + " " + 
-		document.getElementById("recDate").value + " " + 
-		document.getElementById("paymentDate").value;
-}
-
-function companyClick(panelId){
-	var text = document.querySelector("#"+panelId).querySelector("#title").value + " " + 
-		document.querySelector("#"+panelId).querySelector("#reNumber").value + " " + 
-		document.querySelector("#"+panelId).querySelector("#location").value + " " + 
-		document.querySelector("#"+panelId).querySelector("#address").value + " " + 
-		document.querySelector("#"+panelId).querySelector("#bank").value + " " + 
-		document.querySelector("#"+panelId).querySelector("#representative").value;
-		
-	if(panelId == "divReceiver"){
-		document.getElementById("receiver").innerText = "Preču saņēmējs: " + text;
-	}
-	else{
-		document.getElementById("sender").innerText = "Preču piegādātājs: " + text;
-	}
+	
+	/*
+	$('#divSender').find('.title').on('change', function () {
+		var val = $('#divSender').find("[name=title]").val();
+		var tax = $('#Companies option').filter(function() {
+			return this.value == val;
+		}).data('id');
+		alert(tax);
+	}); */
 }
 
 function addRow() {
