@@ -37,6 +37,29 @@ function start(id){
 	
 	addRow();
 	transportChanged();	
+	companies();
+}
+
+function companies(){
+	$('#divSender').find('.title, .reNumber, .location, .address, .bank, .representative').on('change', function () {
+		alert('test');
+	}); 
+	/*
+	$('#divSender').find('.title').on('change', function () {
+		var val = $('#divSender').find("[name=title]").val();
+		var tax = $('#Companies option').filter(function() {
+			return this.value == val;
+		}).data('id');
+		alert(tax);
+	}); */
+	
+	$('#divReceiver').find('.title').on('change', function () {
+		var val = $('#divReceiver').find("[name=title]").val();
+		var tax = $('#Companies option').filter(function() {
+			return this.value == val;
+		}).data('id');
+		alert(tax);
+	}); 
 }
 
 function transportChanged(){

@@ -1,48 +1,52 @@
 <?php
 
 function getCompanyDetails($id){
+	$conn = mysqli_connect("localhost", "root", "", "meansdb");
+	
+	$sql = "SELECT id, name FROM company";
+	$companyList = mysqli_query($conn, $sql);
+	$companies = "<datalist id='Companies'>";
+	while($row = mysqli_fetch_assoc($companyList)) {
+		$companies .= "<option value='".$row["name"]."' data-id = '".$row["id"]."'>";
+	}
+	$companies .=	"</datalist>";
+	echo $companies;
+	
 	if($id!=0){
-		$conn = mysqli_connect("localhost", "root", "", "meansdb");
-		
 		$sql = "SELECT senderId, receiverId, docNumber, prescriptionDate, receptionDate, paymentDate FROM registry WHERE id=$id";
-		
 		$result = mysqli_query($conn, $sql);
-		mysqli_close($conn);
+		$row = mysqli_fetch_assoc($result);
 		
-		if (mysqli_num_rows($result) > 0) {
-			$row = mysqli_fetch_assoc($result);
-			
-			$sender = companyDetails('divSender',$row["senderId"]);
-			$receiver = companyDetails('divReceiver',$row["receiverId"]);
-			
-			echo "<!-- Number of document -->
-				<button class='accordion' id='docNumber' onclick='documentClick()'>Dokuments</button>
-				<div class='panel'>
-					<div class='container'>
-						<input type='text' id='number' placeholder='Dokumenta numurs' value='".$row["docNumber"]."'>
-						<input type='file' accept='.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel'/>
-						<button class='buttonDownload' style='float: right;'><i class='fa fa-download'></i> Lejuplādēt</button>
-					</div>
+		$sender = companyDetails('divSender',$row["senderId"]);
+		$receiver = companyDetails('divReceiver',$row["receiverId"]);
+		
+		echo "<!-- Number of document -->
+			<button class='accordion' id='docNumber' onclick='documentClick()'>Dokuments</button>
+			<div class='panel'>
+				<div class='container'>
+					<input type='text' id='number' placeholder='Dokumenta numurs' value='".$row["docNumber"]."'>
+					<input type='file' accept='.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel'/>
+					<button class='buttonDownload' style='float: right;'><i class='fa fa-download'></i> Lejuplādēt</button>
 				</div>
-				
-				<!-- Date -->
-				<button class='accordion' id='date' onclick='dateClick()'>Datums</button>
-				<div class='panel'>
-					<div class='container'>
-						<input type='date' id='preDate' placeholder='Izrakstīšanas datums' value='".date('Y-m-d',strtotime($row["prescriptionDate"]))."'>
-						<input type='date' id='recDate' placeholder='Saņemšanas datums' value='".date('Y-m-d',strtotime($row["receptionDate"]))."'>
-						<input type='date' id='paymentDate' placeholder='Apmaksas datums' value='".date('Y-m-d',strtotime($row["paymentDate"]))."'>
-					</div>
+			</div>
+			
+			<!-- Date -->
+			<button class='accordion' id='date' onclick='dateClick()'>Datums</button>
+			<div class='panel'>
+				<div class='container'>
+					<input type='date' id='preDate' placeholder='Izrakstīšanas datums' value='".date('Y-m-d',strtotime($row["prescriptionDate"]))."'>
+					<input type='date' id='recDate' placeholder='Saņemšanas datums' value='".date('Y-m-d',strtotime($row["receptionDate"]))."'>
+					<input type='date' id='paymentDate' placeholder='Apmaksas datums' value='".date('Y-m-d',strtotime($row["paymentDate"]))."'>
 				</div>
-				
-				<!-- Deliverer -->
-				<button class='accordion' id='sender' onclick=\"companyClick('divSender')\">Preču piegādātājs</button>
-				$sender
+			</div>
+			
+			<!-- Deliverer -->
+			<button class='accordion' id='sender' onclick=\"companyClick('divSender')\">Preču piegādātājs</button>
+			$sender
 
-				<!-- Receiver -->
-				<button class='accordion' id='receiver' onclick=\"companyClick('divReceiver')\">Preču saņēmējs</button>
-				$receiver";
-		}
+			<!-- Receiver -->
+			<button class='accordion' id='receiver' onclick=\"companyClick('divReceiver')\">Preču saņēmējs</button>
+			$receiver";
 	}
 	else{
 		$sender = companyDetails('divSender',0);
@@ -76,6 +80,7 @@ function getCompanyDetails($id){
 			<button class='accordion' id='receiver' onclick=\"companyClick('divReceiver')\">Preču saņēmējs</button>
 			$receiver";
 	}
+	mysqli_close($conn);
 }
 
 function companyDetails($panelId,$id) {
@@ -84,7 +89,7 @@ function companyDetails($panelId,$id) {
 	if($id!=0){
 		$sql = "SELECT name FROM representative WHERE representative.companyId = $id";
 		$RepresentativeList = mysqli_query($conn, $sql);
-		$representatives = "<datalist id='".$panelId."Representative'>";
+		$representatives = "<datalist id='Representatives'>";
 		while($row = mysqli_fetch_assoc($RepresentativeList)) {
 			$representatives .= "<option value='".$row["name"]."'>";
 		}
@@ -97,36 +102,27 @@ function companyDetails($panelId,$id) {
 		
 		$companyInfo = "<div class='panel' id = '$panelId'>
 				<div class='container'>
-					<input type='text' id='title' placeholder='Kompānijas nosaukums' list='".$panelId."Company' value='".$row["name"]."'/>
+					<input type='text' id='title' class='title' placeholder='Kompānijas nosaukums' list='Companies' value='".$row["name"]."'/>
 					<input type='text' id='reNumber' placeholder='Kompānijas reģistrācijas numurs' value='".$row["regNumber"]."'/>
 					<input type='text' id='location' placeholder='Kompānijas juridiskā adrese' value='".$row["location"]."'/>
 					<input type='text' id='address' placeholder='Kompānijas faktiskā adrese' value='".$row["address"]."'/>
 					<input type='text' id='bank' placeholder='Kompānijas konta numurs' value='".$row["bankNumber"]."'/>
-					<input type='text' id='representative' placeholder='Kompānijas pārstāvis' list='".$panelId."Representative' value='".$row["representative"]."'/>
+					<input type='text' id='representative' placeholder='Kompānijas pārstāvis' list='Representatives' value='".$row["representative"]."'/>
 				</div>
 			</div>
 			$representatives";
 	}
 	else{
-		$sql = "SELECT id, name FROM company";
-		$companyList = mysqli_query($conn, $sql);
-		$companies = "<datalist id='".$panelId."Company'>";
-		while($row = mysqli_fetch_assoc($companyList)) {
-			$companies .= "<option value='".$row["name"]."' data-Id = '".$row["id"]."'>";
-		}
-		$companies .=	"</datalist>";
-		
 		$companyInfo = "<div class='panel' id = '$panelId'>
 				<div class='container'>
-					<input type='text' id='title' placeholder='Kompānijas nosaukums' list='".$panelId."Company'/>
-					<input type='text' id='reNumber' placeholder='Kompānijas reģistrācijas numurs'/>
-					<input type='text' id='location' placeholder='Kompānijas juridiskā adrese'/>
-					<input type='text' id='address' placeholder='Kompānijas faktiskā adrese'/>
-					<input type='text' id='bank' placeholder='Kompānijas konta numurs'/>
-					<input type='text' id='representative' placeholder='Kompānijas pārstāvis'/>
+					<input type='text' id='title' class='title' name='title' placeholder='Kompānijas nosaukums' list='Companies'/>
+					<input type='text' id='reNumber' class='reNumber' placeholder='Kompānijas reģistrācijas numurs'/>
+					<input type='text' id='location' class='location' placeholder='Kompānijas juridiskā adrese'/>
+					<input type='text' id='address' class='address' placeholder='Kompānijas faktiskā adrese'/>
+					<input type='text' id='bank' class='bank' placeholder='Kompānijas konta numurs'/>
+					<input type='text' id='representative' class='representative' placeholder='Kompānijas pārstāvis'/>
 				</div>
-			</div>
-			$companies";
+			</div>";
 	}
 	mysqli_close($conn);
 	

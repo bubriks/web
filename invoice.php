@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
-		<script src="js/jquery.json.min.js"></script>
+		<script src="js/jquery-3.3.1.min.js"></script><!-- jquery -->
+		<script src="js/jquery.json.min.js"></script><!-- JSON -->
 		<script src="js/invoiceJs.js"></script>
 		<link rel="stylesheet" href="css/style.css" />	
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 		<?php
 			include "php/moreInvoice.php";
 			session_start();

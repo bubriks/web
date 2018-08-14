@@ -36,6 +36,7 @@
 					INNER JOIN productgroup on product.productGroupId = productgroup.id
 					SET item.serNumber = '".$row['serNumber']."', 
 						item.incomingPrice = ".floatval($row['priceIn']).",
+						item.quantity = ".intval($row['amount']).",
 						product.barcode = '".$row['barcode']."',
 						product.name = '".$row['name']."',
 						productgroup.name = '".$row['itemGroup']."',

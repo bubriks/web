@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<link rel="stylesheet" href="css/style.css" />
-		<script type="text/javascript" src="//code.jquery.com/jquery-2.1.0.min.js"></script>
+		<script src="js/jquery-3.3.1.min.js"></script>
 		<script src="js/registryJs.js"></script>
 		<?php
 			include "php/moreRegistry.php";
