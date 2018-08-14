@@ -6,7 +6,6 @@
 		<script src="js/registryJs.js"></script>
 		<?php
 			include "php/moreRegistry.php";
-			session_start();
 		?>
 	</head>
 	<body onload="start()">

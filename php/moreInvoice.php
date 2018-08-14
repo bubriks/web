@@ -17,14 +17,14 @@ function getCompanyDetails($id){
 		$result = mysqli_query($conn, $sql);
 		$row = mysqli_fetch_assoc($result);
 		
-		$sender = companyDetails('divSender',$row["senderId"]);
-		$receiver = companyDetails('divReceiver',$row["receiverId"]);
+		$sender = companyDetails('divSender',$row["senderId"],$conn);
+		$receiver = companyDetails('divReceiver',$row["receiverId"],$conn);
 		
-		echo "<!-- Number of document -->
+		$companyCode = "<!-- Number of document -->
 			<input type='button' class='accordion' name='docNumber' value='Dokuments'>
 			<div class='panel'>
 				<div class='container' id='doc'>
-					<input type='text' class='number' name='number' placeholder='Dokumenta numurs' value=''>
+					<input type='text' class='number' name='number' placeholder='Dokumenta numurs' value='".$row["docNumber"]."'>
 					<input type='file' accept='.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel'/>
 					<button class='buttonDownload' style='float: right;'><i class='fa fa-download'></i> Lejuplādēt</button>
 				</div>
@@ -38,21 +38,13 @@ function getCompanyDetails($id){
 					<input type='date' name='recDate' class='recDate' placeholder='Saņemšanas datums' value='".date('Y-m-d',strtotime($row["receptionDate"]))."'>
 					<input type='date' name='paymentDate' class='paymentDate' placeholder='Apmaksas datums' value='".date('Y-m-d',strtotime($row["paymentDate"]))."'>
 				</div>
-			</div>
-			
-			<!-- Deliverer -->
-			<input type='button' class='accordion' name='sender' value='Preču piegādātājs'>
-			$sender
-
-			<!-- Receiver -->
-			<input type='button' class='accordion' name='receiver' value='Preču saņēmējs'>
-			$receiver";
+			</div>";
 	}
 	else{
-		$sender = companyDetails('divSender',0);
-		$receiver = companyDetails('divReceiver',0);
+		$sender = companyDetails('divSender',0,$conn);
+		$receiver = companyDetails('divReceiver',0,$conn);
 		
-		echo "<!-- Number of document -->
+		$companyCode = "<!-- Number of document -->
 			<input type='button' class='accordion' name='docNumber' value='Dokuments'>
 			<div class='panel'>
 				<div class='container' id='doc'>
@@ -70,22 +62,21 @@ function getCompanyDetails($id){
 					<input type='date' name='recDate' class='recDate' placeholder='Saņemšanas datums'>
 					<input type='date' name='paymentDate' class='paymentDate' placeholder='Apmaksas datums'>
 				</div>
-			</div>
-			
-			<!-- Deliverer -->
+			</div>";
+	}
+	$companyCode .= "<!-- Deliverer -->
 			<input type='button' class='accordion' name='sender' value='Preču piegādātājs'>
 			$sender
 
 			<!-- Receiver -->
 			<input type='button' class='accordion' name='receiver' value='Preču saņēmējs'>
 			$receiver";
-	}
+	
+	echo $companyCode;
 	mysqli_close($conn);
 }
 
-function companyDetails($panelId,$id) {
-	$conn = mysqli_connect("localhost", "root", "", "meansdb");
-	
+function companyDetails($panelId,$id,$conn) {
 	if($id!=0){
 		$sql = "SELECT name FROM representative WHERE representative.companyId = $id";
 		$RepresentativeList = mysqli_query($conn, $sql);
@@ -124,7 +115,6 @@ function companyDetails($panelId,$id) {
 				</div>
 			</div>";
 	}
-	mysqli_close($conn);
 	
 	return $companyInfo;
 }
@@ -133,13 +123,10 @@ function getProducts($id){
 	$conn = mysqli_connect("localhost", "root", "", "meansdb");
 	
 	$sql = "SELECT name, tax FROM productgroup";
-
 	$list = mysqli_query($conn, $sql);
 	
 	$sql = "SELECT transport FROM registry WHERE $id";
-
 	$transport = mysqli_query($conn, $sql);
-	
 	$added = mysqli_fetch_assoc($transport)["transport"];
 	if($added == null){
 		$added = 0;
