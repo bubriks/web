@@ -1,7 +1,7 @@
 CREATE DATABASE MeansDB;
 
 CREATE TABLE company(
-    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(30) NOT NULL,
     regNumber VARCHAR(30) NOT NULL,
     location VARCHAR(50) NOT NULL,
@@ -10,44 +10,45 @@ CREATE TABLE company(
 );
 
 CREATE TABLE representative(
-    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     companyId INT NOT NULL REFERENCES company(id),
     name VARCHAR(30) NOT NULL
 );
 
 CREATE TABLE registry(
-    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     senderId INT NOT NULL REFERENCES representative(id),
-	receiverId INT NOT NULL REFERENCES representative(id),
-	transport DECIMAL(2) NOT NULL,
-	docNumber VARCHAR(30) NOT NULL,
-	prescriptionDate TIMESTAMP NOT NULL,
-	receptionDate TIMESTAMP NOT NULL,
-	paymentDate TIMESTAMP NOT NULL
+    receiverId INT NOT NULL REFERENCES representative(id),
+    transport DECIMAL(2) NOT NULL,
+    docNumber VARCHAR(30) NOT NULL,
+    prescriptionDate TIMESTAMP NOT NULL,
+    receptionDate TIMESTAMP NOT NULL,
+    paymentDate TIMESTAMP NOT NULL
 );
 
 CREATE TABLE productGroup(
-    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-	name VARCHAR(30) NOT NULL,
-	tax INT NOT NULL
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(30) NOT NULL,
+    tax INT NOT NULL
 );
 
 CREATE TABLE product(
-    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     productGroupId INT NOT NULL REFERENCES productGroup(id),
-	name VARCHAR(30) NOT NULL,
+    name VARCHAR(30) NOT NULL,
     barcode VARCHAR(30) NOT NULL
 );
 
 CREATE TABLE item(
-    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     productId INT NOT NULL REFERENCES product(id),
-	serNumber VARCHAR(30) NOT NULL,
-	incomingPrice DECIMAL(2) NOT NULL
+    serNumber VARCHAR(30) NOT NULL,
+    quantity INT NOT NULL,
+    incomingPrice DECIMAL(2) NOT NULL
 );
 
 CREATE TABLE items(
     registryId INT NOT NULL REFERENCES registry(id),
-	itemId INT NOT NULL REFERENCES itme(id),
+    itemId INT NOT NULL REFERENCES itme(id),
     PRIMARY KEY (registryId, itemId)
 );

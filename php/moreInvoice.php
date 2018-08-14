@@ -80,14 +80,6 @@ function getCompanyDetails($id){
 
 function companyDetails($panelId,$id) {
 	$conn = mysqli_connect("localhost", "root", "", "meansdb");
-		
-	$sql = "SELECT name FROM company";
-	$companyList = mysqli_query($conn, $sql);
-	$companies = "<datalist id='".$panelId."Company'>";
-	while($row = mysqli_fetch_assoc($companyList)) {
-		$companies .= "<option value='".$row["name"]."'>";
-	}
-	$companies .=	"</datalist>";
 	
 	if($id!=0){
 		$sql = "SELECT name FROM representative WHERE representative.companyId = $id";
@@ -113,20 +105,28 @@ function companyDetails($panelId,$id) {
 					<input type='text' id='representative' placeholder='Kompānijas pārstāvis' list='".$panelId."Representative' value='".$row["representative"]."'/>
 				</div>
 			</div>
-			$companies
 			$representatives";
 	}
 	else{
+		$sql = "SELECT id, name FROM company";
+		$companyList = mysqli_query($conn, $sql);
+		$companies = "<datalist id='".$panelId."Company'>";
+		while($row = mysqli_fetch_assoc($companyList)) {
+			$companies .= "<option value='".$row["name"]."' data-Id = '".$row["id"]."'>";
+		}
+		$companies .=	"</datalist>";
+		
 		$companyInfo = "<div class='panel' id = '$panelId'>
 				<div class='container'>
-					<input type='text' id='title' placeholder='Kompānijas nosaukums'/>
+					<input type='text' id='title' placeholder='Kompānijas nosaukums' list='".$panelId."Company'/>
 					<input type='text' id='reNumber' placeholder='Kompānijas reģistrācijas numurs'/>
 					<input type='text' id='location' placeholder='Kompānijas juridiskā adrese'/>
 					<input type='text' id='address' placeholder='Kompānijas faktiskā adrese'/>
 					<input type='text' id='bank' placeholder='Kompānijas konta numurs'/>
 					<input type='text' id='representative' placeholder='Kompānijas pārstāvis'/>
 				</div>
-			</div>";
+			</div>
+			$companies";
 	}
 	mysqli_close($conn);
 	
@@ -181,12 +181,11 @@ function getProducts($id){
 				<tbody>";
 		
 	if($id!=0){
-		$sql = "SELECT product.name, product.barcode, item.serNumber, productgroup.name as groupName, item.incomingPrice, productgroup.tax, item.id, COUNT(*) as sum FROM items 
+		$sql = "SELECT product.name, product.barcode, item.serNumber, productgroup.name as groupName, item.incomingPrice, productgroup.tax, item.id, item.quantity FROM items 
 				INNER JOIN item ON items.itemId = item.id 
 				INNER JOIN product ON item.productId = product.id 
 				INNER JOIN productgroup ON product.productGroupId = productgroup.id
-				WHERE items.registryId = $id
-				GROUP BY item.serNumber, product.barcode";
+				WHERE items.registryId = $id";
 	
 		$result = mysqli_query($conn, $sql);
 			
@@ -197,7 +196,7 @@ function getProducts($id){
 					<td><input type='text' class='barcode' name='barcode' placeholder='Svītrkods' value='".$row["barcode"]."'/></td>
 					<td><input type='text' class='serNumber' name='serNumber' placeholder='Seriāla numurs' value='".$row["serNumber"]."'/></td>
 					<td><input type='text' class='itemGroup' name='itemGroup' placeholder='Preču grupa' list='prodGroups' value='".$row["groupName"]."'/></td>
-					<td><input type='text' class='amount' name='amount' placeholder='Daudzums' onkeypress='return isNumberKey(event,this.value)' value='".$row["sum"]."'/></td>
+					<td><input type='text' class='amount' name='amount' placeholder='Daudzums' onkeypress='return isNumberKey(event,this.value)' value='".$row["quantity"]."'/></td>
 					<td><input type='text' class='priceIn' name='priceIn' placeholder='Ienākoša cena' onkeypress='return isNumberKey(event,this.value)' value='".$row["incomingPrice"]."'/></td>
 					<td><input type='text' class='tax' name='tax' placeholder='PVN' onkeypress='return isNumberKey(event,this.value)' value='".$row["tax"]."'/></td>
 					<td><input type='text' class='subTotal' name='subTotal' placeholder='Summa' readonly/></td>
