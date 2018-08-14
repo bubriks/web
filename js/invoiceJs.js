@@ -251,15 +251,15 @@ function saveInfo(id){
 	});
 	
 	
-	dates = [document.getElementById("preDate").value,document.getElementById("recDate").value,document.getElementById("paymentDate").value];
-	sender = [document.querySelector("#divSender").querySelector("#title").value, document.querySelector("#divSender").querySelector("#reNumber").value, 
-		document.querySelector("#divSender").querySelector("#location").value, document.querySelector("#divSender").querySelector("#address").value, 
-		document.querySelector("#divSender").querySelector("#bank").value, document.querySelector("#divSender").querySelector("#representative").value];
-	receiver = [document.querySelector("#divReceiver").querySelector("#title").value, document.querySelector("#divReceiver").querySelector("#reNumber").value, 
-		document.querySelector("#divReceiver").querySelector("#location").value, document.querySelector("#divReceiver").querySelector("#address").value, 
-		document.querySelector("#divReceiver").querySelector("#bank").value, document.querySelector("#divReceiver").querySelector("#representative").value];
+	dates = [$('#dates').find("[name=preDate]").val(),$('#dates').find("[name=recDate]").val(),$('#dates').find("[name=paymentDate]").val()];
+	sender = [$('#divSender').find("[name=title]").val(), $('#divSender').find("[name=reNumber]").val(), 
+		$('#divSender').find("[name=location]").val(), $('#divSender').find("[name=address]").val(), 
+		$('#divSender').find("[name=bank]").val(), $('#divSender').find("[name=representative]").val()];
+	receiver = [$('#divReceiver').find("[name=title]").val(), $('#divReceiver').find("[name=reNumber]").val(), 
+		$('#divReceiver').find("[name=location]").val(), $('#divReceiver').find("[name=address]").val(), 
+		$('#divReceiver').find("[name=bank]").val(), $('#divReceiver').find("[name=representative]").val()];
 	transport = $("#productTable tfoot tr").find("[name=transport]").val();	
-	data = [id,document.getElementById("number").value, dates, sender, receiver, transport,TableData];
+	data = [id,$('#doc').find("[name=number]").val(), dates, sender, receiver, transport,TableData];
 	data = $.toJSON(data);
 	
 	$.ajax({
