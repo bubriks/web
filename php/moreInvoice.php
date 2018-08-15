@@ -17,8 +17,8 @@ function getCompanyDetails($id){
 		$result = mysqli_query($conn, $sql);
 		$row = mysqli_fetch_assoc($result);
 		
-		$sender = companyDetails('divSender',$row["senderId"],$conn);
-		$receiver = companyDetails('divReceiver',$row["receiverId"],$conn);
+		$sender = $row["senderId"];
+		$receiver = $row["receiverId"];
 		
 		$companyCode = "<!-- Number of document -->
 			<input type='button' class='accordion' name='docNumber' value='Dokuments'>
@@ -40,9 +40,9 @@ function getCompanyDetails($id){
 				</div>
 			</div>";
 	}
-	else{
-		$sender = companyDetails('divSender',0,$conn);
-		$receiver = companyDetails('divReceiver',0,$conn);
+	else{		
+		$sender = 0;
+		$receiver = 0;
 		
 		$companyCode = "<!-- Number of document -->
 			<input type='button' class='accordion' name='docNumber' value='Dokuments'>
@@ -66,59 +66,22 @@ function getCompanyDetails($id){
 	}
 	$companyCode .= "<!-- Deliverer -->
 			<input type='button' class='accordion' name='sender' value='Preču piegādātājs'>
-			$sender
+			<div class='panel' id = 'divSender'>
+			</div>
 
 			<!-- Receiver -->
 			<input type='button' class='accordion' name='receiver' value='Preču saņēmējs'>
-			$receiver";
+			<div class='panel' id = 'divReceiver'>
+			</div>
+			<script>
+			getCompanyInfo('divSender', $sender, '');
+			getCompanyInfo('divReceiver', $receiver, '');
+			</script>";
 	
 	echo $companyCode;
 	mysqli_close($conn);
 }
 
-function companyDetails($panelId,$id,$conn) {
-	if($id!=0){
-		$sql = "SELECT name FROM representative WHERE representative.companyId = $id";
-		$RepresentativeList = mysqli_query($conn, $sql);
-		$representatives = "<datalist id='Representatives'>";
-		while($row = mysqli_fetch_assoc($RepresentativeList)) {
-			$representatives .= "<option value='".$row["name"]."'>";
-		}
-		$representatives .=	"</datalist>";
-		
-		$sql = "SELECT representative.name as representative, company.name, company.regNumber, company.location, company.address, company.bankNumber 
-				FROM representative INNER JOIN company ON representative.companyId = company.id WHERE representative.id=$id";
-		$result = mysqli_query($conn, $sql);
-		$row = mysqli_fetch_assoc($result);
-		
-		$companyInfo = "<div class='panel' id = '$panelId'>
-				<div class='container'>
-					<input type='text' name='title' class='title' placeholder='Kompānijas nosaukums' list='Companies' value='".$row["name"]."'/>
-					<input type='text' name='reNumber' class='reNumber' placeholder='Kompānijas reģistrācijas numurs' value='".$row["regNumber"]."'/>
-					<input type='text' name='location' class='location' placeholder='Kompānijas juridiskā adrese' value='".$row["location"]."'/>
-					<input type='text' name='address' class='address' placeholder='Kompānijas faktiskā adrese' value='".$row["address"]."'/>
-					<input type='text' name='bank' class='bank' placeholder='Kompānijas konta numurs' value='".$row["bankNumber"]."'/>
-					<input type='text' name='representative' class='representative' placeholder='Kompānijas pārstāvis' list='Representatives' value='".$row["representative"]."'/>
-				</div>
-			</div>
-			$representatives";
-	}
-	else{
-		$companyInfo = "<div class='panel' id = '$panelId'>
-				<div class='container'>
-					<input type='text' name='title' class='title' placeholder='Kompānijas nosaukums' list='Companies' value=''/>
-					<input type='text' name='reNumber' class='reNumber' placeholder='Kompānijas reģistrācijas numurs' value=''/>
-					<input type='text' name='location' class='location' placeholder='Kompānijas juridiskā adrese' value=''/>
-					<input type='text' name='address' class='address' placeholder='Kompānijas faktiskā adrese' value=''/>
-					<input type='text' name='bank' class='bank' placeholder='Kompānijas konta numurs' value=''/>
-					<input type='text' name='representative' class='representative' placeholder='Kompānijas pārstāvis' value=''/>
-				</div>
-			</div>";
-	}
-	
-	return $companyInfo;
-}
-		
 function getProducts($id){
 	$conn = mysqli_connect("localhost", "root", "", "meansdb");
 	

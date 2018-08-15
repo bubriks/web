@@ -97,28 +97,7 @@ function changeCompany(elementId){
 		var id = $('#Companies option').filter(function() {
 			return this.value == val;
 		}).data('id');
-		if(isNaN(id)){
-			document.getElementById(elementId).innerHTML = "<div class='container'>"+
-				"<input type='text' name='title' class='title' placeholder='Kompānijas nosaukums' list='Companies' value='"+val+"'/>"+
-				"<input type='text' name='reNumber' class='reNumber' placeholder='Kompānijas reģistrācijas numurs' value=''/>"+
-				"<input type='text' name='location' class='location' placeholder='Kompānijas juridiskā adrese' value=''/>"+
-				"<input type='text' name='address' class='address' placeholder='Kompānijas faktiskā adrese' value=''/>"+
-				"<input type='text' name='bank' class='bank' placeholder='Kompānijas konta numurs' value=''/>"+
-				"<input type='text' name='representative' class='representative' placeholder='Kompānijas pārstāvis' value=''/>"+
-			"</div>";
-			changeCompany(elementId);
-		}
-		else{
-			var xmlhttp = new XMLHttpRequest();
-			xmlhttp.onreadystatechange = function() {
-				if (this.readyState == 4 && this.status == 200) {
-					document.getElementById(elementId).innerHTML = this.responseText;
-					changeCompany(elementId);
-				}
-			};
-			xmlhttp.open("GET","php/companySelected.php?id="+id,true);
-			xmlhttp.send();
-		}
+		getCompanyInfo(elementId, id, val);
 	});
 	$('#'+elementId).find('.reNumber, .location, .address, .bank, .representative').on('change', function () {
 		var titleVal = " "+$('#'+elementId).find("[name=title]").val();
@@ -133,9 +112,40 @@ function changeCompany(elementId){
 		addressVal = (addressVal==" ") ? "" : addressVal;
 		bankVal = (bankVal==" ") ? "" : bankVal;
 		representativeVal = (representativeVal==" ") ? "" : representativeVal;
-		$("[name="+elementId.substring(3).toLowerCase()+"]").val("Preču piegādātājs"+titleVal+reNumberVal+locationVal+addressVal+bankVal+representativeVal);
+		if(elementId == "divSender"){
+			var sentence = "Preču piegādātājs";
+		}
+		else{
+			var sentence = "Preču saņēmējs";
+		}
+		$("[name="+elementId.substring(3).toLowerCase()+"]").val(sentence+titleVal+reNumberVal+locationVal+addressVal+bankVal+representativeVal);
 	}); 
 	$('#'+elementId).find("[name=reNumber]").change();
+}
+
+function getCompanyInfo(elementId, id, val){
+	if(isNaN(id) || id==0){
+		document.getElementById(elementId).innerHTML = "<div class='container'>"+
+			"<input type='text' name='title' class='title' placeholder='Kompānijas nosaukums' list='Companies' value='"+val+"'/>"+
+			"<input type='text' name='reNumber' class='reNumber' placeholder='Kompānijas reģistrācijas numurs' value=''/>"+
+			"<input type='text' name='location' class='location' placeholder='Kompānijas juridiskā adrese' value=''/>"+
+			"<input type='text' name='address' class='address' placeholder='Kompānijas faktiskā adrese' value=''/>"+
+			"<input type='text' name='bank' class='bank' placeholder='Kompānijas konta numurs' value=''/>"+
+			"<input type='text' name='representative' class='representative' placeholder='Kompānijas pārstāvis' value=''/>"+
+		"</div>";
+		changeCompany(elementId);
+	}
+	else{
+		var xmlhttp = new XMLHttpRequest();
+			xmlhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				document.getElementById(elementId).innerHTML = this.responseText;
+				changeCompany(elementId);
+			}
+		};
+		xmlhttp.open("GET","php/companySelected.php?id="+id,true);
+		xmlhttp.send();
+	}
 }
 
 function addRow() {

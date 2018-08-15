@@ -3,7 +3,6 @@
 saglabat summu????
 izveidot jaunas grupas
 izveidot jaunus produktus
-uzlabot visus produktus ja ir vairak par 1 quantity
-mekle kompaniju un representtive (tāpat kā product group)
+izvaidot jaunas kompanijas
 
 kopeja summa par laiku registry
