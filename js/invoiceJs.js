@@ -21,8 +21,6 @@ function start(id){
 	if(id>0){
 		$('#doc').find("[name=number]").change();
 		$('#dates').find("[name=preDate]").change();
-		$('#divSender').find("[name=title]").change();
-		$('#divReceiver').find("[name=title]").change();
 		
 		$("#productTable tbody tr").each(function (index) {
 			var $tblrow = $(this);
@@ -55,38 +53,6 @@ function companies(){
 		paymentDate = (paymentDate==" ") ? "" : paymentDate;
 		$("[name=date]").val("Datums"+preDate+recDate+paymentDate);
 	}); 
-	
-	$('#divSender').find('.title, .reNumber, .location, .address, .bank, .representative').on('change', function () {
-		var titleVal = " "+$('#divSender').find("[name=title]").val();
-		var reNumberVal = " "+$('#divSender').find("[name=reNumber]").val();
-		var locationVal = " "+$('#divSender').find("[name=location]").val();
-		var addressVal = " "+$('#divSender').find("[name=address]").val();
-		var bankVal = " "+$('#divSender').find("[name=bank]").val();
-		var representativeVal = " "+$('#divSender').find("[name=representative]").val();
-		titleVal = (titleVal==" ") ? "" : titleVal;
-		reNumberVal = (reNumberVal==" ") ? "" : reNumberVal;
-		locationVal = (locationVal==" ") ? "" : locationVal;
-		addressVal = (addressVal==" ") ? "" : addressVal;
-		bankVal = (bankVal==" ") ? "" : bankVal;
-		representativeVal = (representativeVal==" ") ? "" : representativeVal;
-		$("[name=sender]").val("Preču piegādātājs"+titleVal+reNumberVal+locationVal+addressVal+bankVal+representativeVal);
-	}); 
-	
-	$('#divReceiver').find('.title, .reNumber, .location, .address, .bank, .representative').on('change', function () {
-		var titleVal = " "+$('#divReceiver').find("[name=title]").val();
-		var reNumberVal = " "+$('#divReceiver').find("[name=reNumber]").val();
-		var locationVal = " "+$('#divReceiver').find("[name=location]").val();
-		var addressVal = " "+$('#divReceiver').find("[name=address]").val();
-		var bankVal = " "+$('#divReceiver').find("[name=bank]").val();
-		var representativeVal = " "+$('#divReceiver').find("[name=representative]").val();
-		titleVal = (titleVal==" ") ? "" : titleVal;
-		reNumberVal = (reNumberVal==" ") ? "" : reNumberVal;
-		locationVal = (locationVal==" ") ? "" : locationVal;
-		addressVal = (addressVal==" ") ? "" : addressVal;
-		bankVal = (bankVal==" ") ? "" : bankVal;
-		representativeVal = (representativeVal==" ") ? "" : representativeVal;
-		$("[name=receiver]").val("Preču saņēmējs"+titleVal+reNumberVal+locationVal+addressVal+bankVal+representativeVal);
-	}); 
 
 	$("#productTable tfoot tr").each(function (index) {
 		var $tblrow = $(this);
@@ -117,14 +83,59 @@ function companies(){
 		}); 
 	});
 	
-	/*
-	$('#divSender').find('.title').on('change', function () {
-		var val = $('#divSender').find("[name=title]").val();
-		var tax = $('#Companies option').filter(function() {
+	changeCompany("divSender");
+	changeCompany("divReceiver");
+}
+
+function changeCompany(elementId){
+	$('#'+elementId).find('.title').on('change', function () {
+		$.ajaxSetup ({
+			cache: false
+		});
+		
+		var val = $('#'+elementId).find("[name=title]").val();
+		var id = $('#Companies option').filter(function() {
 			return this.value == val;
 		}).data('id');
-		alert(tax);
-	}); */
+		if(isNaN(id)){
+			document.getElementById(elementId).innerHTML = "<div class='container'>"+
+				"<input type='text' name='title' class='title' placeholder='Kompānijas nosaukums' list='Companies' value='"+val+"'/>"+
+				"<input type='text' name='reNumber' class='reNumber' placeholder='Kompānijas reģistrācijas numurs' value=''/>"+
+				"<input type='text' name='location' class='location' placeholder='Kompānijas juridiskā adrese' value=''/>"+
+				"<input type='text' name='address' class='address' placeholder='Kompānijas faktiskā adrese' value=''/>"+
+				"<input type='text' name='bank' class='bank' placeholder='Kompānijas konta numurs' value=''/>"+
+				"<input type='text' name='representative' class='representative' placeholder='Kompānijas pārstāvis' value=''/>"+
+			"</div>";
+			changeCompany(elementId);
+		}
+		else{
+			var xmlhttp = new XMLHttpRequest();
+			xmlhttp.onreadystatechange = function() {
+				if (this.readyState == 4 && this.status == 200) {
+					document.getElementById(elementId).innerHTML = this.responseText;
+					changeCompany(elementId);
+				}
+			};
+			xmlhttp.open("GET","php/companySelected.php?id="+id,true);
+			xmlhttp.send();
+		}
+	});
+	$('#'+elementId).find('.reNumber, .location, .address, .bank, .representative').on('change', function () {
+		var titleVal = " "+$('#'+elementId).find("[name=title]").val();
+		var reNumberVal = " "+$('#'+elementId).find("[name=reNumber]").val();
+		var locationVal = " "+$('#'+elementId).find("[name=location]").val();
+		var addressVal = " "+$('#'+elementId).find("[name=address]").val();
+		var bankVal = " "+$('#'+elementId).find("[name=bank]").val();
+		var representativeVal = " "+$('#'+elementId).find("[name=representative]").val();
+		titleVal = (titleVal==" ") ? "" : titleVal;
+		reNumberVal = (reNumberVal==" ") ? "" : reNumberVal;
+		locationVal = (locationVal==" ") ? "" : locationVal;
+		addressVal = (addressVal==" ") ? "" : addressVal;
+		bankVal = (bankVal==" ") ? "" : bankVal;
+		representativeVal = (representativeVal==" ") ? "" : representativeVal;
+		$("[name="+elementId.substring(3).toLowerCase()+"]").val("Preču piegādātājs"+titleVal+reNumberVal+locationVal+addressVal+bankVal+representativeVal);
+	}); 
+	$('#'+elementId).find("[name=reNumber]").change();
 }
 
 function addRow() {
