@@ -38,7 +38,7 @@ CREATE TABLE product(
     productGroupId INT NOT NULL REFERENCES productGroup(id),
     name VARCHAR(30) NOT NULL,
     barcode VARCHAR(30) NOT NULL,
-    UNIQUE (barcodes)
+    UNIQUE (barcode)
 );
 
 CREATE TABLE item(

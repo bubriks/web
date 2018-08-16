@@ -31,8 +31,7 @@
 	foreach ($data[6] as $row){
 		$id = floatval($row['id']);
 		if($id != 0){
-			$sql .= "SET @update_id := ".floatval($row['productGroupId']).";
-					INSERT INTO productgroup(id, name, tax) VALUES (@update_id,'".$row['itemGroup']."',".floatval($row['tax']).")
+			$sql .= "INSERT INTO productgroup(id, name, tax) VALUES (".floatval($row['productGroupId']).",'".$row['itemGroup']."',".floatval($row['tax']).")
 					ON DUPLICATE KEY UPDATE tax = VALUES(tax), id=LAST_INSERT_ID(id);
 
 					UPDATE item 

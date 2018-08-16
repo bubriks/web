@@ -193,6 +193,44 @@ function changeRowValue(row){
 		calculateTotal();
 	}); 
 	
+	row.find('.name').on('change', function () {
+		$("#productTable tbody tr").each(function (index) {
+			var $tblrow = $(this);
+			if($tblrow.find("[name=productId]").val() == row.find("[name=productId]").val()){
+				$tblrow.find("[name=name]").val(row.find("[name=name]").val());
+			}
+		});
+	});
+	
+	row.find('.barcode').on('change', function () {
+		$.ajaxSetup ({
+			cache: false
+		});
+		
+		var xmlhttp = new XMLHttpRequest();
+		xmlhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				var response = this.responseText;
+				
+				var id = response.split('|')[0];
+				if(isNaN(id)){
+					id = 0;
+				}
+				row.find("[name=id]").val(id);
+				
+				var productGroupId = response.split('|')[1];
+				if(isNaN(productGroupId)){
+					productGroupId = 0;
+				}
+				row.find("[name=productGroupId]").val(productGroupId);
+				
+				row.find("[name=name]").val(response.split('|')[2]);				
+			}
+		};
+		xmlhttp.open("GET","php/barcodeChanged.php?barcode="+row.find("[name=barcode]").val(),true);
+		xmlhttp.send();
+	});
+	
 	row.find('.amount, .priceIn, .tax').on('change', function () {
 		calulateRowValue(row);
 		calculateTotal();
