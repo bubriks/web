@@ -162,9 +162,9 @@ function addRow() {
 	var cell8 = row.insertCell(8);
 	cell.innerHTML = "<input type='hidden' name='id' class='id' value='0'/><button class='buttonDelete' style='border-radius: 4px;' onclick='deleteRow(this);'>Dzēst</button>";
 	cell1.innerHTML = "<input type='text' class='name' name='name' placeholder='Nosaukums' />";
-	cell2.innerHTML = "<input type='text' class='barcode' name='barcode' placeholder='Svītrkods' />";
+	cell2.innerHTML = "<input type='hidden' name='productId' class='productId' value='0'/><input type='text' class='barcode' name='barcode' placeholder='Svītrkods' />";
 	cell3.innerHTML = "<input type='text' class='serNumber' name='serNumber' placeholder='Seriāla numurs' />";
-	cell4.innerHTML = "<input type='text' class='itemGroup' name='itemGroup' placeholder='Preču grupa' list='prodGroups' />";
+	cell4.innerHTML = "<input type='hidden' name='productGroupId' class='productGroupId' value='0'/><input type='text' class='itemGroup' name='itemGroup' placeholder='Preču grupa' list='prodGroups' />";
 	cell5.innerHTML = "<input type='text' class='amount' name='amount' placeholder='Daudzums' onkeypress='return isNumberKey(event,this.value)' />";
 	cell6.innerHTML = "<input type='text' class='priceIn' name='priceIn' placeholder='Ienākoša cena' onkeypress='return isNumberKey(event,this.value)' />";
 	cell7.innerHTML = "<input type='text' class='tax' name='tax' placeholder='PVN' onkeypress='return isNumberKey(event,this.value)' />";

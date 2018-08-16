@@ -29,21 +29,19 @@
 			where registry.id = ".$data[0].";";
 	
 	foreach ($data[6] as $row){
-		$id = floatval($row['id']);
-		if($id != 0){
-			$sql .= "INSERT INTO productgroup(id, name, tax) VALUES (".floatval($row['productGroupId']).",'".$row['itemGroup']."',".floatval($row['tax']).")
-					ON DUPLICATE KEY UPDATE tax = VALUES(tax), id=LAST_INSERT_ID(id);
-
-					UPDATE item 
-					INNER JOIN product ON item.productId = product.id
-					SET item.serNumber = '".$row['serNumber']."', 
-						item.incomingPrice = ".floatval($row['priceIn']).",
-						item.quantity = ".intval($row['amount']).",
-						product.barcode = '".$row['barcode']."',
-						product.name = '".$row['name']."',
-						product.productGroupId = LAST_INSERT_ID()
-					where item.id = $id;";
-		}
+		$sql .= "INSERT INTO productgroup(id, name, tax) VALUES (".floatval($row['productGroupId']).",'".$row['itemGroup']."',".floatval($row['tax']).")
+				ON DUPLICATE KEY UPDATE tax = VALUES(tax), id=LAST_INSERT_ID(id);
+				
+				INSERT INTO product(id, productGroupId, name, barcode) VALUES (".floatval($row['productId']).",LAST_INSERT_ID(),'".$row['name']."','".$row['barcode']."')
+				ON DUPLICATE KEY UPDATE id=LAST_INSERT_ID(id), productGroupId = VALUES(productGroupId), name = VALUES(name);
+				
+				INSERT INTO item(id, productId, serNumber, incomingPrice, quantity) VALUES (".floatval($row['id']).",LAST_INSERT_ID(), '".$row['serNumber']."', 
+				".floatval($row['priceIn']).", ".intval($row['amount']).")
+				ON DUPLICATE KEY UPDATE id=LAST_INSERT_ID(id), productId = VALUES(productId), serNumber = VALUES(serNumber), incomingPrice = VALUES(incomingPrice),
+				quantity = VALUES(quantity);
+				
+				INSERT INTO items(registryId, itemId) VALUES (".$data[0].",LAST_INSERT_ID())
+				ON DUPLICATE KEY UPDATE registryId=registryId;";
 	}
 	
 	if (mysqli_multi_query($conn, $sql)) {
