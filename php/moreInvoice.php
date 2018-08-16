@@ -127,7 +127,7 @@ function getProducts($id){
 				<tbody>";
 		
 	if($id!=0){
-		$sql = "SELECT product.name, product.barcode, item.serNumber, productgroup.name as groupName, item.incomingPrice, productgroup.tax, productgroup.id as groupId, item.id, item.quantity FROM items 
+		$sql = "SELECT product.name, product.barcode, item.serNumber, productgroup.name as groupName, item.incomingPrice, productgroup.tax, productgroup.id as groupId, item.id, product.id as productId, item.quantity FROM items 
 				INNER JOIN item ON items.itemId = item.id 
 				INNER JOIN product ON item.productId = product.id 
 				INNER JOIN productgroup ON product.productGroupId = productgroup.id
@@ -139,7 +139,7 @@ function getProducts($id){
 			 $products .= "<tr>
 					<td><input type='hidden' name='id' class='id' value='".$row["id"]."'/><button class='buttonDelete' style='border-radius: 4px;' onclick='deleteRow(this);'>Dzēst</button></td>
 					<td><input type='text' class='name' name='name' placeholder='Nosaukums' value='".$row["name"]."'/></td>
-					<td><input type='text' class='barcode' name='barcode' placeholder='Svītrkods' value='".$row["barcode"]."'/></td>
+					<td><input type='hidden' name='productId' class='productId' value='".$row["productId"]."'/><input type='text' class='barcode' name='barcode' placeholder='Svītrkods' value='".$row["barcode"]."'/></td>
 					<td><input type='text' class='serNumber' name='serNumber' placeholder='Seriāla numurs' value='".$row["serNumber"]."'/></td>
 					<td><input type='hidden' name='productGroupId' class='productGroupId' value='".$row["groupId"]."'/><input type='text' class='itemGroup' name='itemGroup' placeholder='Preču grupa' list='prodGroups' value='".$row["groupName"]."'/></td>
 					<td><input type='text' class='amount' name='amount' placeholder='Daudzums' onkeypress='return isNumberKey(event,this.value)' value='".$row["quantity"]."'/></td>

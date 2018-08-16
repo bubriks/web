@@ -33,7 +33,7 @@
 		if($id != 0){
 			$sql .= "SET @update_id := ".floatval($row['productGroupId']).";
 					INSERT INTO productgroup(id, name, tax) VALUES (@update_id,'".$row['itemGroup']."',".floatval($row['tax']).")
-					ON DUPLICATE KEY UPDATE tax = VALUES(tax);
+					ON DUPLICATE KEY UPDATE tax = VALUES(tax), id=LAST_INSERT_ID(id);
 
 					UPDATE item 
 					INNER JOIN product ON item.productId = product.id
@@ -42,7 +42,7 @@
 						item.quantity = ".intval($row['amount']).",
 						product.barcode = '".$row['barcode']."',
 						product.name = '".$row['name']."',
-						product.productGroupId = (SELECT IF(LAST_INSERT_ID() > 0, LAST_INSERT_ID(), @update_id))
+						product.productGroupId = LAST_INSERT_ID()
 					where item.id = $id;";
 		}
 	}

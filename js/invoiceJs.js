@@ -179,8 +179,16 @@ function changeRowValue(row){
 		var selectedOption = $('#prodGroups option').filter(function() {
 			return this.value == val;
 		});
-		row.find("[name=tax]").val(selectedOption.data('tax'));
-		row.find("[name=productGroupId]").val(selectedOption.data('id'));
+		
+		$("#productTable tbody tr").each(function (index) {
+			var $tblrow = $(this);
+			if($tblrow.find("[name=productId]").val() == row.find("[name=productId]").val()){
+				$tblrow.find("[name=itemGroup]").val(val);
+				$tblrow.find("[name=tax]").val(selectedOption.data('tax'));
+				$tblrow.find("[name=productGroupId]").val(selectedOption.data('id'));
+			}
+		});
+		
 		calulateRowValue(row);
 		calculateTotal();
 	}); 

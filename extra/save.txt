@@ -4,6 +4,7 @@ saglabat summu????
 izveidot jaunas grupas
 izveidot jaunus produktus
 izvaidot jaunas kompanijas
+prdukts tapat ka produktu grupa
 produkta grupa maina produktu
 nelaut varakus ar vienadu vardu
 
