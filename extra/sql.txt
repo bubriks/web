@@ -29,7 +29,8 @@ CREATE TABLE registry(
 CREATE TABLE productGroup(
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(30) NOT NULL,
-    tax INT NOT NULL
+    tax INT NOT NULL,
+    UNIQUE (name)
 );
 
 CREATE TABLE product(

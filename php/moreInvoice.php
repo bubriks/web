@@ -85,7 +85,7 @@ function getCompanyDetails($id){
 function getProducts($id){
 	$conn = mysqli_connect("localhost", "root", "", "meansdb");
 	
-	$sql = "SELECT name, tax FROM productgroup";
+	$sql = "SELECT id, name, tax FROM productgroup";
 	$list = mysqli_query($conn, $sql);
 	
 	$sql = "SELECT transport FROM registry WHERE $id";
@@ -127,7 +127,7 @@ function getProducts($id){
 				<tbody>";
 		
 	if($id!=0){
-		$sql = "SELECT product.name, product.barcode, item.serNumber, productgroup.name as groupName, item.incomingPrice, productgroup.tax, item.id, item.quantity FROM items 
+		$sql = "SELECT product.name, product.barcode, item.serNumber, productgroup.name as groupName, item.incomingPrice, productgroup.tax, productgroup.id as groupId, item.id, item.quantity FROM items 
 				INNER JOIN item ON items.itemId = item.id 
 				INNER JOIN product ON item.productId = product.id 
 				INNER JOIN productgroup ON product.productGroupId = productgroup.id
@@ -141,7 +141,7 @@ function getProducts($id){
 					<td><input type='text' class='name' name='name' placeholder='Nosaukums' value='".$row["name"]."'/></td>
 					<td><input type='text' class='barcode' name='barcode' placeholder='Svītrkods' value='".$row["barcode"]."'/></td>
 					<td><input type='text' class='serNumber' name='serNumber' placeholder='Seriāla numurs' value='".$row["serNumber"]."'/></td>
-					<td><input type='text' class='itemGroup' name='itemGroup' placeholder='Preču grupa' list='prodGroups' value='".$row["groupName"]."'/></td>
+					<td><input type='hidden' name='productGroupId' class='productGroupId' value='".$row["groupId"]."'/><input type='text' class='itemGroup' name='itemGroup' placeholder='Preču grupa' list='prodGroups' value='".$row["groupName"]."'/></td>
 					<td><input type='text' class='amount' name='amount' placeholder='Daudzums' onkeypress='return isNumberKey(event,this.value)' value='".$row["quantity"]."'/></td>
 					<td><input type='text' class='priceIn' name='priceIn' placeholder='Ienākoša cena' onkeypress='return isNumberKey(event,this.value)' value='".$row["incomingPrice"]."'/></td>
 					<td><input type='text' class='tax' name='tax' placeholder='PVN' onkeypress='return isNumberKey(event,this.value)' value='".$row["tax"]."'/></td>
@@ -161,7 +161,7 @@ function getProducts($id){
 	
 	$groups = "<datalist id='prodGroups'>";
 	while($row = mysqli_fetch_assoc($list)) {
-		$groups .= "<option value='".$row["name"]."' label = '".$row["tax"]."'  data-tax = '".$row["tax"]."' >";
+		$groups .= "<option value='".$row["name"]."' label = '".$row["tax"]."'  data-tax = '".$row["tax"]."' data-id = '".$row["id"]."'>";
 	}
 	$groups .=	"</datalist>
 		<button class='buttonSave' onclick='saveInfo($id)'>Apstiprināt</button>

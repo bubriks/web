@@ -4,5 +4,24 @@ saglabat summu????
 izveidot jaunas grupas
 izveidot jaunus produktus
 izvaidot jaunas kompanijas
+produkta grupa maina produktu
+nelaut varakus ar vienadu vardu
 
 kopeja summa par laiku registry
+
+
+
+SET @update_id := 4;
+INSERT INTO productgroup(id, name, tax) VALUES (@update_id,'test',9)
+ON DUPLICATE KEY UPDATE name = VALUES(name), tax = VALUES(tax);
+
+UPDATE item 
+INNER JOIN product ON item.productId = product.id
+INNER JOIN productgroup on product.productGroupId = productgroup.id
+SET item.serNumber = '3212', 
+	item.incomingPrice = 12,
+	item.quantity = 1,
+	product.barcode = '23421',
+	product.name = 'test',
+    product.productGroupId = (SELECT IF(LAST_INSERT_ID() > 0, LAST_INSERT_ID(), @update_id))
+where item.id = 1;

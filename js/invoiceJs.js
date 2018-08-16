@@ -176,10 +176,11 @@ function addRow() {
 function changeRowValue(row){
 	row.find('.itemGroup').on('change', function () {
 		var val = row.find("[name=itemGroup]").val();
-		var tax = $('#prodGroups option').filter(function() {
+		var selectedOption = $('#prodGroups option').filter(function() {
 			return this.value == val;
-		}).data('tax');
-		row.find("[name=tax]").val(tax);
+		});
+		row.find("[name=tax]").val(selectedOption.data('tax'));
+		row.find("[name=productGroupId]").val(selectedOption.data('id'));
 		calulateRowValue(row);
 		calculateTotal();
 	}); 
@@ -267,7 +268,8 @@ function saveInfo(id){
 			"itemGroup" : $(tr).find('[name=itemGroup]').val(),
 			"amount" : $(tr).find('[name=amount]').val(),
 			"priceIn" : $(tr).find('[name=priceIn]').val(),
-			"tax" : $(tr).find('[name=tax]').val()
+			"tax" : $(tr).find('[name=tax]').val(),
+			"productGroupId" : $(tr).find('[name=productGroupId]').val()
 		}
 	});
 	

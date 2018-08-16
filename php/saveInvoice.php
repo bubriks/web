@@ -31,16 +31,18 @@
 	foreach ($data[6] as $row){
 		$id = floatval($row['id']);
 		if($id != 0){
-			$sql .= "UPDATE item 
+			$sql .= "SET @update_id := ".floatval($row['productGroupId']).";
+					INSERT INTO productgroup(id, name, tax) VALUES (@update_id,'".$row['itemGroup']."',".floatval($row['tax']).")
+					ON DUPLICATE KEY UPDATE tax = VALUES(tax);
+
+					UPDATE item 
 					INNER JOIN product ON item.productId = product.id
-					INNER JOIN productgroup on product.productGroupId = productgroup.id
 					SET item.serNumber = '".$row['serNumber']."', 
 						item.incomingPrice = ".floatval($row['priceIn']).",
 						item.quantity = ".intval($row['amount']).",
 						product.barcode = '".$row['barcode']."',
 						product.name = '".$row['name']."',
-						productgroup.name = '".$row['itemGroup']."',
-						productgroup.tax = ".floatval($row['tax'])."   
+						product.productGroupId = (SELECT IF(LAST_INSERT_ID() > 0, LAST_INSERT_ID(), @update_id))
 					where item.id = $id;";
 		}
 	}
