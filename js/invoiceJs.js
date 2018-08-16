@@ -310,17 +310,23 @@ function saveInfo(id){
 	var TableData = new Array();
     
 	$('#productTable tbody tr').each(function(row, tr){
-		TableData[row]={
-			"id" :$(tr).find('[name=id]').val(),
-			"productId" :$(tr).find('[name=productId]').val(),
-			"name" :$(tr).find('[name=name]').val(),
-			"barcode" : $(tr).find('[name=barcode]').val(),
-			"serNumber" : $(tr).find('[name=serNumber]').val(),
-			"itemGroup" : $(tr).find('[name=itemGroup]').val(),
-			"amount" : $(tr).find('[name=amount]').val(),
-			"priceIn" : $(tr).find('[name=priceIn]').val(),
-			"tax" : $(tr).find('[name=tax]').val(),
-			"productGroupId" : $(tr).find('[name=productGroupId]').val()
+		if($(tr).find('[name=name]').val() != "" || $(tr).find('[name=barcode]').val() != "" || $(tr).find('[name=itemGroup]').val() != ""
+			|| $(tr).find('[name=amount]').val() != "" || $(tr).find('[name=priceIn]').val() != "" || $(tr).find('[name=tax]').val() != ""){
+			TableData[row]={
+				"id" :$(tr).find('[name=id]').val(),
+				"productId" :$(tr).find('[name=productId]').val(),
+				"name" :$(tr).find('[name=name]').val(),
+				"barcode" : $(tr).find('[name=barcode]').val(),
+				"serNumber" : $(tr).find('[name=serNumber]').val(),
+				"itemGroup" : $(tr).find('[name=itemGroup]').val(),
+				"amount" : $(tr).find('[name=amount]').val(),
+				"priceIn" : $(tr).find('[name=priceIn]').val(),
+				"tax" : $(tr).find('[name=tax]').val(),
+				"productGroupId" : $(tr).find('[name=productGroupId]').val()
+			}
+		}
+		else{
+			 $(tr).css('background', '#ff7a42');
 		}
 	});
 	
