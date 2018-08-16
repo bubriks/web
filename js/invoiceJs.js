@@ -216,15 +216,19 @@ function changeRowValue(row){
 				if(isNaN(id)){
 					id = 0;
 				}
-				row.find("[name=id]").val(id);
+				row.find("[name=productId]").val(id);
 				
 				var productGroupId = response.split('|')[1];
 				if(isNaN(productGroupId)){
 					productGroupId = 0;
 				}
+				else{
+					row.find("[name=itemGroup]").val($("#prodGroups option[data-id='" + productGroupId + "']").val());
+				}
 				row.find("[name=productGroupId]").val(productGroupId);
+				row.find("[name=itemGroup]").change();
 				
-				row.find("[name=name]").val(response.split('|')[2]);				
+				row.find("[name=name]").val(response.split('|')[2]);
 			}
 		};
 		xmlhttp.open("GET","php/barcodeChanged.php?barcode="+row.find("[name=barcode]").val(),true);
@@ -308,6 +312,7 @@ function saveInfo(id){
 	$('#productTable tbody tr').each(function(row, tr){
 		TableData[row]={
 			"id" :$(tr).find('[name=id]').val(),
+			"productId" :$(tr).find('[name=productId]').val(),
 			"name" :$(tr).find('[name=name]').val(),
 			"barcode" : $(tr).find('[name=barcode]').val(),
 			"serNumber" : $(tr).find('[name=serNumber]').val(),
