@@ -18,13 +18,14 @@ function getRegistry(){
 	$conn = mysqli_connect("localhost", "root", "", "meansdb");
 	
 	$sql = "SELECT registry.id, receptionDate, company.name, company.bankNumber, paymentDate, docNumber, transport,
-			SUM(item.incomingPrice * item.quantity) as incomingPrice, SUM(item.incomingPrice * (productgroup.tax / 100) * item.quantity) as tax FROM registry
+			SUM((item.incomingPrice * item.quantity)) as incomingPrice, SUM((item.incomingPrice * (productgroup.tax / 100) * item.quantity)) as tax FROM registry
 			INNER JOIN representative on representative.id = registry.senderId
 			INNER JOIN company on company.id = representative.companyId
 			INNER JOIN items on items.registryId = registry.id
 			INNER JOIN item on item.id = items.itemId
 			INNER JOIN product on product.id = item.productId
-			INNER JOIN productgroup on productgroup.id = product.productGroupId order by registry.id desc limit 50";
+			INNER JOIN productgroup on productgroup.id = product.productGroupId 
+            GROUP BY registry.id desc limit 50";
 
 	$result = mysqli_query($conn, $sql);
 	

@@ -318,48 +318,69 @@ function deleteRow(btndel){
 }
 
 function saveInfo(id){
-	var TableData = new Array();
-    
-	$('#productTable tbody tr').each(function(row, tr){
-		if($(tr).find('[name=name]').val() != "" || $(tr).find('[name=barcode]').val() != "" || $(tr).find('[name=itemGroup]').val() != ""
-			|| $(tr).find('[name=amount]').val() != "" || $(tr).find('[name=priceIn]').val() != "" || $(tr).find('[name=tax]').val() != ""){
-			TableData[row]={
-				"id" :$(tr).find('[name=id]').val(),
-				"productId" :$(tr).find('[name=productId]').val(),
-				"name" :$(tr).find('[name=name]').val(),
-				"barcode" : $(tr).find('[name=barcode]').val(),
-				"serNumber" : $(tr).find('[name=serNumber]').val(),
-				"itemGroup" : $(tr).find('[name=itemGroup]').val(),
-				"amount" : $(tr).find('[name=amount]').val(),
-				"priceIn" : $(tr).find('[name=priceIn]').val(),
-				"tax" : $(tr).find('[name=tax]').val(),
-				"productGroupId" : $(tr).find('[name=productGroupId]').val()
+	if($('#dates').find("[name=preDate]").val() != "" && $('#dates').find("[name=recDate]").val() != "" && $('#dates').find("[name=paymentDate]").val() != "" &&
+		
+		$('#divSender').find("[name=title]").val() != "" && $('#divSender').find("[name=reNumber]").val() != "" &&
+		$('#divSender').find("[name=location]").val() != "" && $('#divSender').find("[name=address]").val() != "" && 
+		$('#divSender').find("[name=bank]").val() != "" && $('#divSender').find("[name=representative]").val() != "" &&
+		$('#divSender').find("[name=representativeId]").val() != "" && $('#divSender').find("[name=companyId]").val() != "" &&
+		
+		$('#divReceiver').find("[name=title]").val() != "" && $('#divReceiver').find("[name=reNumber]").val() != "" &&
+		$('#divReceiver').find("[name=location]").val() != "" && $('#divReceiver').find("[name=address]").val() != "" && 
+		$('#divReceiver').find("[name=bank]").val() != "" && $('#divReceiver').find("[name=representative]").val() != "" &&
+		$('#divReceiver').find("[name=representativeId]").val() != "" && $('#divReceiver').find("[name=companyId]").val() != "" &&
+		
+		$("#productTable tfoot tr").find("[name=transport]").val() != "" && $('#doc').find("[name=number]").val()){
+			
+		var TableData = new Array();
+		
+		$('#productTable tbody tr').each(function(row, tr){
+			if($(tr).find('[name=name]').val() != "" || $(tr).find('[name=barcode]').val() != "" || $(tr).find('[name=itemGroup]').val() != ""
+				|| $(tr).find('[name=amount]').val() != "" || $(tr).find('[name=priceIn]').val() != "" || $(tr).find('[name=tax]').val() != ""){
+				TableData[row]={
+					"id" :$(tr).find('[name=id]').val(),
+					"productId" :$(tr).find('[name=productId]').val(),
+					"name" :$(tr).find('[name=name]').val(),
+					"barcode" : $(tr).find('[name=barcode]').val(),
+					"serNumber" : $(tr).find('[name=serNumber]').val(),
+					"itemGroup" : $(tr).find('[name=itemGroup]').val(),
+					"amount" : $(tr).find('[name=amount]').val(),
+					"priceIn" : $(tr).find('[name=priceIn]').val(),
+					"tax" : $(tr).find('[name=tax]').val(),
+					"productGroupId" : $(tr).find('[name=productGroupId]').val()
+				}
+				$(tr).css('background', '#9ef442');
 			}
-		}
-		else{
-			 $(tr).css('background', '#ff7a42');
-		}
-	});
+			else{
+				 $(tr).css('background', '#ff7a42');
+			}
+		});
 	
-	dates = [$('#dates').find("[name=preDate]").val(),$('#dates').find("[name=recDate]").val(),$('#dates').find("[name=paymentDate]").val()];
-	sender = [$('#divSender').find("[name=title]").val(), $('#divSender').find("[name=reNumber]").val(), 
-		$('#divSender').find("[name=location]").val(), $('#divSender').find("[name=address]").val(), 
-		$('#divSender').find("[name=bank]").val(), $('#divSender').find("[name=representative]").val(),
-		$('#divSender').find("[name=representativeId]").val(), $('#divSender').find("[name=companyId]").val()];
-	receiver = [$('#divReceiver').find("[name=title]").val(), $('#divReceiver').find("[name=reNumber]").val(), 
-		$('#divReceiver').find("[name=location]").val(), $('#divReceiver').find("[name=address]").val(), 
-		$('#divReceiver').find("[name=bank]").val(), $('#divReceiver').find("[name=representative]").val(),
-		$('#divReceiver').find("[name=representativeId]").val(), $('#divReceiver').find("[name=companyId]").val()];
-	transport = $("#productTable tfoot tr").find("[name=transport]").val();	
-	data = [id,$('#doc').find("[name=number]").val(), dates, sender, receiver, transport,TableData];
-	data = $.toJSON(data);
 	
-	$.ajax({
-		type: "POST",
-		url: "php/saveInvoice.php",
-		data: "data=" + data,
-		success: function(msg){
-			alert(msg);
-		}
-	});
+		
+		dates = [$('#dates').find("[name=preDate]").val(),$('#dates').find("[name=recDate]").val(),$('#dates').find("[name=paymentDate]").val()];
+		sender = [$('#divSender').find("[name=title]").val(), $('#divSender').find("[name=reNumber]").val(), 
+			$('#divSender').find("[name=location]").val(), $('#divSender').find("[name=address]").val(), 
+			$('#divSender').find("[name=bank]").val(), $('#divSender').find("[name=representative]").val(),
+			$('#divSender').find("[name=representativeId]").val(), $('#divSender').find("[name=companyId]").val()];
+		receiver = [$('#divReceiver').find("[name=title]").val(), $('#divReceiver').find("[name=reNumber]").val(), 
+			$('#divReceiver').find("[name=location]").val(), $('#divReceiver').find("[name=address]").val(), 
+			$('#divReceiver').find("[name=bank]").val(), $('#divReceiver').find("[name=representative]").val(),
+			$('#divReceiver').find("[name=representativeId]").val(), $('#divReceiver').find("[name=companyId]").val()];
+		transport = $("#productTable tfoot tr").find("[name=transport]").val();	
+		data = [id,$('#doc').find("[name=number]").val(), dates, sender, receiver, transport,TableData];
+		data = $.toJSON(data);
+		
+		$.ajax({
+			type: "POST",
+			url: "php/saveInvoice.php",
+			data: "data=" + data,
+			success: function(msg){
+				alert(msg);
+			}
+		});
+	}
+	else{
+		alert("Informācijas ievade nav pabeigta!")
+	}
 }

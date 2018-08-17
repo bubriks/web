@@ -13,12 +13,12 @@ function getCompanyDetails($id){
 	echo $companies;
 	
 	if($id!=0){
-		$sql = "SELECT senderId, receiverId, docNumber, prescriptionDate, receptionDate, paymentDate FROM registry WHERE id=$id";
+		$sql = "SELECT senderId, receiverId, docNumber, prescriptionDate, receptionDate, paymentDate from registry where id=$id";
 		$result = mysqli_query($conn, $sql);
 		$row = mysqli_fetch_assoc($result);
 		
-		$sender = $row["senderId"];
-		$receiver = $row["receiverId"];
+		$sender = intval($row["senderId"]) * -1;
+		$receiver = intval($row["receiverId"]) * -1;
 		
 		$companyCode = "<!-- Number of document -->
 			<input type='button' class='accordion' name='docNumber' value='Dokuments'>
@@ -88,7 +88,7 @@ function getProducts($id){
 	$sql = "SELECT id, name, tax FROM productgroup";
 	$list = mysqli_query($conn, $sql);
 	
-	$sql = "SELECT transport FROM registry WHERE $id";
+	$sql = "SELECT transport FROM registry WHERE id=$id";
 	$transport = mysqli_query($conn, $sql);
 	$added = mysqli_fetch_assoc($transport)["transport"];
 	if($added == null){

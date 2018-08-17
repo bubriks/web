@@ -26,23 +26,25 @@
 			
 			INSERT INTO registry(id, senderId, receiverId, docNumber, prescriptionDate, receptionDate, paymentDate, transport) 
 				VALUES (".$data[0].",@senderId, @receiverId, '".$data[1]."','".$data[2][0]."','".$data[2][1]."','".$data[2][2]."',".$data[5].") 
-			ON DUPLICATE KEY UPDATE senderId = VALUES(senderId), receiverId = VALUES(receiverId), 
+			ON DUPLICATE KEY UPDATE id=LAST_INSERT_ID(id), senderId = VALUES(senderId), receiverId = VALUES(receiverId), 
 			docNumber = VALUES(docNumber), prescriptionDate = VALUES(prescriptionDate), receptionDate = VALUES(receptionDate), 
-			paymentDate = VALUES(paymentDate), transport = VALUES(transport);";
+			paymentDate = VALUES(paymentDate), transport = VALUES(transport);
+			
+			Set @registryId = LAST_INSERT_ID();";
 	
 	foreach ($data[6] as $row){
 		$sql .= "INSERT INTO productgroup(id, name, tax) VALUES (".floatval($row['productGroupId']).",'".$row['itemGroup']."',".floatval($row['tax']).")
 				ON DUPLICATE KEY UPDATE tax = VALUES(tax), id=LAST_INSERT_ID(id);
 				
 				INSERT INTO product(id, productGroupId, name, barcode) VALUES (".floatval($row['productId']).",LAST_INSERT_ID(),'".$row['name']."','".$row['barcode']."')
-				ON DUPLICATE KEY UPDATE id=LAST_INSERT_ID(id), productGroupId = VALUES(productGroupId), name = VALUES(name);
+				ON DUPLICATE KEY UPDATE id=LAST_INSERT_ID(id), productGroupId = VALUES(productGroupId), name = VALUES(name), barcode = VALUES(barcode);
 				
 				INSERT INTO item(id, productId, serNumber, incomingPrice, quantity) VALUES (".floatval($row['id']).",LAST_INSERT_ID(), '".$row['serNumber']."', 
 				".floatval($row['priceIn']).", ".intval($row['amount']).")
 				ON DUPLICATE KEY UPDATE id=LAST_INSERT_ID(id), productId = VALUES(productId), serNumber = VALUES(serNumber), incomingPrice = VALUES(incomingPrice),
 				quantity = VALUES(quantity);
 				
-				INSERT INTO items(registryId, itemId) VALUES (".$data[0].",LAST_INSERT_ID())
+				INSERT INTO items(registryId, itemId) VALUES (@registryId,LAST_INSERT_ID())
 				ON DUPLICATE KEY UPDATE registryId=registryId;";
 	}
 	

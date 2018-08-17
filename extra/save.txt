@@ -1,6 +1,5 @@
 ﻿augsup un lejuplade
 
-izveidot jaunu dokumentu
-dont allow empty input
+delete
 
 kopeja summa par laiku registry
