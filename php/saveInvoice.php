@@ -4,29 +4,31 @@
 	
 	$conn = mysqli_connect("localhost", "root", "", "meansdb");
 	
-	$sql = "UPDATE registry
-			INNER JOIN representative as sender ON registry.senderId = sender.id
-			INNER JOIN company as senderC on sender.companyId = senderC.id
-			INNER JOIN representative as receiver ON registry.receiverId = receiver.id
-			INNER JOIN company as receiverC on receiver.companyId = receiverC.id
-			SET registry.docNumber = '".$data[1]."',
-				registry.prescriptionDate = '".$data[2][0]."',
-				registry.receptionDate = '".$data[2][1]."',
-				registry.paymentDate = '".$data[2][2]."',
-				registry.transport = ".$data[5].",
-				sender.name = '".$data[3][5]."',
-				senderC.name = '".$data[3][0]."',
-				senderC.regNumber = '".$data[3][1]."',
-				senderC.location = '".$data[3][2]."',
-				senderC.address = '".$data[3][3]."',
-				senderC.bankNumber = '".$data[3][4]."',
-				receiver.name = '".$data[4][5]."',
-				receiverC.name = '".$data[4][0]."',
-				receiverC.regNumber = '".$data[4][1]."',
-				receiverC.location = '".$data[4][2]."',
-				receiverC.address = '".$data[4][3]."',
-				receiverC.bankNumber = '".$data[4][4]."'
-			where registry.id = ".$data[0].";";
+	$sql = "INSERT INTO company(id, name, regNumber, location, address, bankNumber) VALUES (".$data[3][7].",'".$data[3][0]."',
+				'".$data[3][1]."','".$data[3][2]."','".$data[3][3]."','".$data[3][4]."') 
+			ON DUPLICATE KEY UPDATE id=LAST_INSERT_ID(id), name = VALUES(name), regNumber = VALUES(regNumber), location = VALUES(location), 
+				address = VALUES(address), bankNumber = VALUES(bankNumber);
+
+			INSERT INTO representative(id, companyId, name) VALUES (".$data[3][6].",LAST_INSERT_ID(),'".$data[3][5]."') 
+			ON DUPLICATE KEY UPDATE id=LAST_INSERT_ID(id), companyId = VALUES(companyId), name = VALUES(name);
+
+			Set @senderId = LAST_INSERT_ID();
+			
+			INSERT INTO company(id, name, regNumber, location, address, bankNumber) VALUES (".$data[4][7].",'".$data[4][0]."',
+				'".$data[4][1]."','".$data[4][2]."','".$data[4][3]."','".$data[4][4]."') 
+			ON DUPLICATE KEY UPDATE id=LAST_INSERT_ID(id), name = VALUES(name), regNumber = VALUES(regNumber), location = VALUES(location), 
+				address = VALUES(address), bankNumber = VALUES(bankNumber);
+
+			INSERT INTO representative(id, companyId, name) VALUES (".$data[4][6].",LAST_INSERT_ID(),'".$data[4][5]."') 
+			ON DUPLICATE KEY UPDATE id=LAST_INSERT_ID(id), companyId = VALUES(companyId), name = VALUES(name);
+
+			Set @receiverId = LAST_INSERT_ID();
+			
+			INSERT INTO registry(id, senderId, receiverId, docNumber, prescriptionDate, receptionDate, paymentDate, transport) 
+				VALUES (".$data[0].",@senderId, @receiverId, '".$data[1]."','".$data[2][0]."','".$data[2][1]."','".$data[2][2]."',".$data[5].") 
+			ON DUPLICATE KEY UPDATE senderId = VALUES(senderId), receiverId = VALUES(receiverId), 
+			docNumber = VALUES(docNumber), prescriptionDate = VALUES(prescriptionDate), receptionDate = VALUES(receptionDate), 
+			paymentDate = VALUES(paymentDate), transport = VALUES(transport);";
 	
 	foreach ($data[6] as $row){
 		$sql .= "INSERT INTO productgroup(id, name, tax) VALUES (".floatval($row['productGroupId']).",'".$row['itemGroup']."',".floatval($row['tax']).")
